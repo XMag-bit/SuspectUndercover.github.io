@@ -6,570 +6,179 @@
 <title>Suspect</title>
 <style>
 * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
-body {
+
+html, body {
+  height: 100%;
+  overflow: hidden;
   font-family: 'Segoe UI', sans-serif;
   background: linear-gradient(135deg, #0a0527 0%, #1e1143 40%, #2a1a5e 100%);
-  min-height: 100vh;
   color: #e0e0e0;
-  padding: 0;
-  overflow-x: hidden;
 }
 
-/* ============ MODERN SETUP SCREEN ============ */
-.setup-wrapper {
-  max-width: 480px;
+/* ═══════════════════════════════
+   SCREEN SYSTEM
+   ═══════════════════════════════ */
+.screen { display: none; width: 100%; height: 100dvh; overflow: hidden; }
+.screen.active { display: flex; flex-direction: column; }
+
+/* ═══════════════════════════════
+   SETUP SCREEN LAYOUT
+   ═══════════════════════════════ */
+.setup-wrap {
+  width: 100%;
+  max-width: 520px;
   margin: 0 auto;
-  padding: 20px 16px;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.setup-header {
-  text-align: center;
-  padding: 20px 0 30px;
-}
-
-.setup-header h1 {
-  font-size: 2.5em;
-  font-weight: 800;
-  background: linear-gradient(135deg, #00ff88, #00d4ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 8px;
-}
-
-/* Player Slider Section */
-.slider-card {
-  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-  border-radius: 24px;
-  padding: 28px 24px;
-  margin-bottom: 20px;
-  backdrop-filter: blur(15px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-}
-
-.player-count-display {
-  text-align: center;
-  margin-bottom: 24px;
-}
-
-.player-count-label {
-  font-size: 1.1em;
-  color: rgba(255,255,255,0.7);
-  margin-bottom: 12px;
-  font-weight: 600;
-}
-
-.player-count-number {
-  font-size: 4em;
-  font-weight: 900;
-  background: linear-gradient(135deg, #00ff88, #00d4ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  line-height: 1;
-}
-
-/* Slider Styling */
-.slider-container {
-  position: relative;
-  padding: 15px 0;
-}
-
-input[type="range"] {
-  -webkit-appearance: none;
-  width: 100%;
-  height: 10px;
-  border-radius: 10px;
-  background: linear-gradient(90deg, #00ff88 0%, #00d4ff 100%);
-  outline: none;
-  opacity: 0.95;
-  transition: opacity 0.2s;
-}
-
-input[type="range"]:hover {
-  opacity: 1;
-}
-
-input[type="range"]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  appearance: none;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #00ff88, #00d4ff);
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0,255,136,0.6);
-  border: 4px solid #0a0527;
-  transition: transform 0.2s;
-}
-
-input[type="range"]::-webkit-slider-thumb:active {
-  transform: scale(1.1);
-}
-
-input[type="range"]::-moz-range-thumb {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #00ff88, #00d4ff);
-  cursor: pointer;
-  box-shadow: 0 4px 16px rgba(0,255,136,0.6);
-  border: 4px solid #0a0527;
-}
-
-.slider-labels {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 12px;
-  font-size: 0.9em;
-  color: rgba(255,255,255,0.6);
-  font-weight: 600;
-}
-
-/* Assassin Counter */
-.assassin-counter-card {
-  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-  border-radius: 24px;
-  padding: 20px 24px;
-  margin-bottom: 20px;
-  backdrop-filter: blur(15px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.assassin-info {
-  flex: 1;
-}
-
-.assassin-label {
-  font-size: 0.9em;
-  color: rgba(255,255,255,0.7);
-  margin-bottom: 4px;
-}
-
-.assassin-count {
-  font-size: 2em;
-  font-weight: 800;
-  color: #ff0055;
-}
-
-.time-count {
-  font-size: 2em;
-  font-weight: 800;
-  color: #fff;
-}
-
-.counter-controls {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.counter-btn {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
-  border: 2px solid rgba(255,255,255,0.3);
-  color: white;
-  font-size: 1.8em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-weight: 700;
-}
-
-.counter-btn:hover {
-  background: linear-gradient(135deg, rgba(255,255,255,0.25), rgba(255,255,255,0.15));
-  border-color: rgba(255,255,255,0.5);
-}
-
-.counter-btn:active {
-  transform: scale(0.9);
-}
-
-.counter-btn:disabled {
-  opacity: 0.3;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* Roles Button */
-.roles-btn {
-  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
-  border-radius: 24px;
-  padding: 20px 24px;
-  backdrop-filter: blur(15px);
-  box-shadow: 0 8px 32px rgba(0,0,0,0.4);
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  cursor: pointer;
-  transition: all 0.2s;
-  border: 2px solid transparent;
-}
-
-.roles-btn:hover {
-  background: linear-gradient(135deg, rgba(255,255,255,0.15), rgba(255,255,255,0.08));
-  border-color: rgba(0,255,136,0.3);
-}
-
-.roles-btn:active {
-  transform: scale(0.98);
-}
-
-.roles-btn-content {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.roles-btn-icon {
-  font-size: 1.8em;
-}
-
-.roles-btn-text {
-  font-size: 1.1em;
-  font-weight: 700;
-  color: rgba(255,255,255,0.95);
-}
-
-.roles-btn-arrow {
-  font-size: 1.4em;
-  color: rgba(255,255,255,0.6);
-}
-
-/* Modal Overlay */
-.modal-overlay {
-  display: none;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.85);
-  backdrop-filter: blur(8px);
-  z-index: 1000;
-  animation: fadeIn 0.3s;
-}
-
-.modal-overlay.active {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-/* Modal Content */
-.modal-content {
-  background: linear-gradient(135deg, #1e1143 0%, #2a1a5e 100%);
-  border-radius: 24px;
-  width: 90%;
-  max-width: 450px;
-  max-height: 85vh;
-  overflow: hidden;
-  box-shadow: 0 16px 64px rgba(0,0,0,0.6);
-  animation: slideUp 0.3s;
-}
-
-@keyframes slideUp {
-  from { transform: translateY(50px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-.modal-header {
-  padding: 24px 20px;
-  border-bottom: 2px solid rgba(255,255,255,0.1);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.modal-title {
-  font-size: 1.3em;
-  font-weight: 800;
-  background: linear-gradient(135deg, #00ff88, #00d4ff);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-.modal-close {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.1);
-  border: none;
-  color: white;
-  font-size: 1.5em;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.modal-close:hover {
-  background: rgba(255,255,255,0.2);
-  transform: rotate(90deg);
-}
-
-.modal-body {
-  padding: 20px;
-  max-height: calc(85vh - 80px);
-  overflow-y: auto;
-}
-
-.roles-list {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  padding: clamp(10px,2vh,18px) clamp(12px,3vw,20px);
+  gap: clamp(6px,1.4vh,12px);
 }
 
-.role-item {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 16px 14px;
-  margin-bottom: 10px;
-  background: rgba(255,255,255,0.06);
-  border-radius: 16px;
-  transition: all 0.2s;
-  border: 2px solid transparent;
-}
-
-.role-item:hover {
-  background: rgba(255,255,255,0.1);
-  border-color: rgba(0,255,136,0.2);
-}
-
-.role-item:active {
-  transform: scale(0.98);
-}
-
-.role-info {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  flex: 1;
-}
-
-.role-icon {
-  font-size: 2em;
-  width: 45px;
-  text-align: center;
-}
-
-.role-details {
-  flex: 1;
-}
-
-.role-name {
-  font-size: 1.05em;
-  font-weight: 700;
-  color: rgba(255,255,255,0.95);
-  margin-bottom: 4px;
-}
-
-.role-desc {
-  font-size: 0.8em;
-  color: rgba(255,255,255,0.5);
-  line-height: 1.3;
-}
-
-/* Toggle Switch */
-.checkbox-wrapper {
-  position: relative;
-  display: inline-block;
-}
-
-.role-checkbox {
-  opacity: 0;
-  position: absolute;
-  pointer-events: none;
-}
-
-.checkbox-toggle {
-  width: 56px;
-  height: 32px;
-  background: rgba(255,255,255,0.15);
-  border-radius: 20px;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.3s;
-  border: 2px solid rgba(255,255,255,0.2);
-}
-
-.checkbox-toggle::after {
-  content: '';
-  position: absolute;
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.9);
-  top: 2px;
-  left: 2px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-}
-
-.role-checkbox:checked + .checkbox-toggle {
+.setup-header { text-align: center; flex-shrink: 0; }
+.setup-header h1 {
+  font-size: clamp(1.6em,4vw,2.2em);
+  font-weight: 800;
   background: linear-gradient(135deg, #00ff88, #00d4ff);
-  border-color: #00ff88;
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
 }
 
-.role-checkbox:checked + .checkbox-toggle::after {
-  left: 26px;
-  background: white;
-  box-shadow: 0 2px 8px rgba(0,255,136,0.4);
+.setup-card {
+  background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+  border-radius: clamp(12px,2vw,18px);
+  padding: clamp(10px,1.8vh,16px) clamp(14px,3vw,22px);
+  backdrop-filter: blur(15px);
+  box-shadow: 0 6px 24px rgba(0,0,0,0.4);
+  flex-shrink: 0;
 }
 
-/* Start Button */
-.start-btn {
-  width: 100%;
-  padding: 20px;
-  border: none;
-  border-radius: 24px;
-  background: linear-gradient(135deg, #00ff88, #00d4ff);
-  color: #0a0527;
-  font-size: 1.3em;
-  font-weight: 900;
-  cursor: pointer;
-  box-shadow: 0 8px 32px rgba(0,255,136,0.5);
-  margin-top: auto;
-  margin-bottom: 20px;
-  transition: all 0.2s;
-  text-transform: uppercase;
-  letter-spacing: 1px;
+.player-count-display { display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:clamp(6px,1.2vh,10px); }
+.player-count-label { font-size:clamp(0.85em,2vw,1em); color:rgba(255,255,255,0.7); font-weight:600; }
+.player-count-number { font-size:clamp(1.8em,5vw,2.5em); font-weight:900; background:linear-gradient(135deg,#00ff88,#00d4ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; line-height:1; }
+
+.slider-container { padding: 4px 0; }
+input[type="range"] { -webkit-appearance:none; width:100%; height:10px; border-radius:10px; background:linear-gradient(90deg,#00ff88,#00d4ff); outline:none; opacity:0.95; }
+input[type="range"]::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:clamp(28px,6vw,34px); height:clamp(28px,6vw,34px); border-radius:50%; background:linear-gradient(135deg,#00ff88,#00d4ff); cursor:pointer; box-shadow:0 4px 16px rgba(0,255,136,0.6); border:4px solid #0a0527; transition:transform 0.2s; }
+input[type="range"]::-webkit-slider-thumb:active { transform:scale(1.1); }
+input[type="range"]::-moz-range-thumb { width:32px; height:32px; border-radius:50%; background:linear-gradient(135deg,#00ff88,#00d4ff); cursor:pointer; box-shadow:0 4px 16px rgba(0,255,136,0.6); border:4px solid #0a0527; }
+.slider-labels { display:flex; justify-content:space-between; margin-top:6px; font-size:0.82em; color:rgba(255,255,255,0.6); font-weight:600; }
+
+.counter-row { display:flex; align-items:center; justify-content:space-between; }
+.ctr-info { flex:1; }
+.ctr-label { font-size:clamp(0.78em,2vw,0.88em); color:rgba(255,255,255,0.7); margin-bottom:2px; }
+.ctr-val-red { font-size:clamp(1.4em,4vw,1.9em); font-weight:800; color:#ff0055; line-height:1; }
+.ctr-val-white { font-size:clamp(1.4em,4vw,1.9em); font-weight:800; color:#fff; line-height:1; }
+.ctr-btns { display:flex; align-items:center; gap:10px; }
+.ctr-btn { width:clamp(36px,8vw,44px); height:clamp(36px,8vw,44px); border-radius:50%; background:linear-gradient(135deg,rgba(255,255,255,0.15),rgba(255,255,255,0.05)); border:2px solid rgba(255,255,255,0.3); color:white; font-size:1.5em; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s; font-weight:700; }
+.ctr-btn:hover { background:linear-gradient(135deg,rgba(255,255,255,0.25),rgba(255,255,255,0.15)); border-color:rgba(255,255,255,0.5); }
+.ctr-btn:active { transform:scale(0.9); }
+.ctr-btn:disabled { opacity:0.3; cursor:not-allowed; transform:none; }
+
+.roles-row { display:flex; align-items:center; justify-content:space-between; cursor:pointer; transition:all 0.2s; border:2px solid transparent; }
+.roles-row:hover { background:linear-gradient(135deg,rgba(255,255,255,0.15),rgba(255,255,255,0.08)); border-color:rgba(0,255,136,0.3); border-radius:clamp(12px,2vw,18px); }
+.roles-row:active { transform:scale(0.98); }
+.roles-row-left { display:flex; align-items:center; gap:10px; }
+.roles-icon { font-size:1.4em; }
+.roles-text { font-size:clamp(0.9em,2vw,1em); font-weight:700; color:rgba(255,255,255,0.95); }
+.roles-arrow { font-size:1.2em; color:rgba(255,255,255,0.6); }
+
+.start-btn { width:100%; padding:clamp(12px,2vh,17px); border:none; border-radius:clamp(12px,2vw,18px); background:linear-gradient(135deg,#00ff88,#00d4ff); color:#0a0527; font-size:clamp(1em,2.5vw,1.2em); font-weight:900; cursor:pointer; box-shadow:0 8px 32px rgba(0,255,136,0.5); flex-shrink:0; transition:all 0.2s; text-transform:uppercase; letter-spacing:1px; }
+.start-btn:active { transform:scale(0.97); }
+
+.setup-alert { padding:9px 14px; border-radius:12px; font-size:0.88em; display:none; font-weight:600; flex-shrink:0; }
+.setup-alert.error { background:rgba(255,0,85,0.2); border:2px solid rgba(255,0,85,0.5); color:#ff6688; display:block; }
+
+/* ═══════════════════════════════
+   MODAL
+   ═══════════════════════════════ */
+.modal-overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.85); backdrop-filter:blur(8px); z-index:1000; }
+.modal-overlay.active { display:flex; align-items:center; justify-content:center; }
+.modal-content { background:linear-gradient(135deg,#1e1143,#2a1a5e); border-radius:24px; width:90%; max-width:450px; max-height:88vh; overflow:hidden; box-shadow:0 16px 64px rgba(0,0,0,0.6); display:flex; flex-direction:column; animation:slideUp 0.3s; }
+@keyframes slideUp { from { transform:translateY(50px); opacity:0; } to { transform:translateY(0); opacity:1; } }
+.modal-header { padding:16px 20px; border-bottom:2px solid rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:space-between; flex-shrink:0; }
+.modal-title { font-size:1.15em; font-weight:800; background:linear-gradient(135deg,#00ff88,#00d4ff); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+.modal-close { width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,0.1); border:none; color:white; font-size:1.3em; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.2s; }
+.modal-close:hover { background:rgba(255,255,255,0.2); transform:rotate(90deg); }
+.modal-body { padding:14px 18px; overflow-y:auto; flex:1; }
+.roles-list { display:flex; flex-direction:column; gap:8px; }
+.role-item { display:flex; align-items:center; justify-content:space-between; padding:11px 12px; background:rgba(255,255,255,0.06); border-radius:13px; transition:all 0.2s; border:2px solid transparent; cursor:pointer; }
+.role-item:hover { background:rgba(255,255,255,0.1); border-color:rgba(0,255,136,0.2); }
+.role-info { display:flex; align-items:center; gap:10px; flex:1; }
+.role-icon { font-size:1.5em; width:34px; text-align:center; }
+.role-name { font-size:0.96em; font-weight:700; color:rgba(255,255,255,0.95); margin-bottom:2px; }
+.role-desc { font-size:0.74em; color:rgba(255,255,255,0.5); }
+.role-checkbox { opacity:0; position:absolute; pointer-events:none; }
+.checkbox-toggle { width:50px; height:28px; background:rgba(255,255,255,0.15); border-radius:20px; position:relative; cursor:pointer; transition:all 0.3s; border:2px solid rgba(255,255,255,0.2); display:block; }
+.checkbox-toggle::after { content:''; position:absolute; width:20px; height:20px; border-radius:50%; background:rgba(255,255,255,0.9); top:2px; left:2px; transition:all 0.3s cubic-bezier(0.4,0,0.2,1); }
+.role-checkbox:checked + .checkbox-toggle { background:linear-gradient(135deg,#00ff88,#00d4ff); border-color:#00ff88; }
+.role-checkbox:checked + .checkbox-toggle::after { left:22px; background:white; }
+
+/* ═══════════════════════════════
+   GAME SCREENS
+   ═══════════════════════════════ */
+.game-wrap {
+  width:100%; max-width:520px; margin:0 auto; height:100%;
+  display:flex; flex-direction:column;
+  padding:clamp(10px,2vh,16px) clamp(12px,3vw,20px);
 }
 
-.start-btn:active {
-  transform: scale(0.97);
-  box-shadow: 0 4px 16px rgba(0,255,136,0.4);
-}
-
-.start-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-  transform: none;
-}
-
-/* Alert */
-.setup-alert {
-  padding: 16px 18px;
-  border-radius: 16px;
-  margin-bottom: 16px;
-  font-size: 0.95em;
-  display: none;
-  animation: slideIn 0.3s;
-  font-weight: 600;
-}
-
-.setup-alert.error {
-  background: rgba(255,0,85,0.2);
-  border: 2px solid rgba(255,0,85,0.5);
-  color: #ff6688;
-}
-
-.setup-alert.warning {
-  background: rgba(255,170,0,0.2);
-  border: 2px solid rgba(255,170,0,0.5);
-  color: #ffaa00;
-}
-
-.setup-alert.active {
-  display: block;
-}
-
-@keyframes slideIn {
-  from { transform: translateY(-10px); opacity: 0; }
-  to { transform: translateY(0); opacity: 1; }
-}
-
-/* ============ GAME SCREENS (from original) ============ */
-.screen { display: none; }
-.screen.active { display: block; }
-.container { max-width: 480px; margin: 0 auto; padding: 16px; display: flex; flex-direction: column; justify-content: center; min-height: 100vh; }
-
-h1 {
-  text-align: center;
-  font-size: 2em;
-  background: linear-gradient(135deg, #00ff88, #a020f0);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  padding: 10px 0 4px;
-}
-
-.card {
-  background: rgba(20,20,35,0.95);
-  border: 2px solid rgba(0,255,136,0.3);
-  border-radius: 16px;
-  padding: 20px;
-  margin-bottom: 16px;
-}
-.card h2 { color:#00ff88; margin-bottom:16px; font-size:1.1em; }
-
-label { display:block; color:#00ff88; font-size:0.85em; font-weight:600; margin-bottom:5px; }
-small { color:#666; font-size:0.78em; display:block; margin-top:2px; }
-
-input[type=text] {
-  width:100%; padding:10px 12px;
-  background:rgba(20,20,30,0.8);
+.game-card {
+  background:rgba(20,20,35,0.95);
   border:2px solid rgba(0,255,136,0.3);
-  border-radius:10px; color:#e0e0e0; font-size:15px;
+  border-radius:16px;
+  flex:1; display:flex; flex-direction:column;
+  overflow:hidden; min-height:0;
 }
-input:focus { outline:none; border-color:#00ff88; }
 
-.btn {
-  width:100%; padding:13px;
-  border:none; border-radius:12px;
-  font-size:15px; font-weight:700;
-  cursor:pointer; margin-top:10px;
-  letter-spacing:1px; text-transform:uppercase;
-  transition: transform 0.2s, box-shadow 0.2s;
+.gc-head {
+  padding:clamp(12px,2vh,16px) clamp(14px,3vw,20px) clamp(6px,1vh,10px);
+  flex-shrink:0;
+  border-bottom:1px solid rgba(0,255,136,0.1);
 }
+.gc-body {
+  flex:1; overflow-y:auto; padding:clamp(8px,1.5vh,14px) clamp(14px,3vw,20px);
+  -webkit-overflow-scrolling:touch; min-height:0;
+}
+.gc-body::-webkit-scrollbar { width:3px; }
+.gc-body::-webkit-scrollbar-thumb { background:rgba(0,255,136,0.3); border-radius:3px; }
+.gc-foot {
+  padding:clamp(8px,1.5vh,12px) clamp(14px,3vw,20px);
+  flex-shrink:0; border-top:1px solid rgba(0,255,136,0.1);
+  display:flex; flex-direction:column; gap:6px;
+}
+
+/* ═══════════════════════════════
+   SHARED COMPONENTS
+   ═══════════════════════════════ */
+.round-badge { text-align:center; color:#a020f0; font-weight:700; font-size:0.98em; margin-bottom:6px; }
+.screen-title { color:#00ff88; font-size:1em; font-weight:700; margin-bottom:8px; text-align:center; }
+
+.btn { width:100%; padding:clamp(9px,1.8vh,13px); border:none; border-radius:12px; font-size:clamp(13px,2.5vw,15px); font-weight:700; cursor:pointer; letter-spacing:1px; text-transform:uppercase; transition:transform 0.2s,box-shadow 0.2s; flex-shrink:0; }
 .btn:active { transform:scale(0.97); }
 .btn-primary { background:linear-gradient(135deg,#00ff88,#00cc6a); color:#0a0a1a; box-shadow:0 4px 15px rgba(0,255,136,0.3); }
-.btn-secondary { background:linear-gradient(135deg,#a020f0,#7a1bb3); color:#fff; box-shadow:0 4px 15px rgba(160,32,240,0.3); }
+.btn-secondary { background:linear-gradient(135deg,#a020f0,#7a1bb3); color:#fff; }
 .btn-danger { background:linear-gradient(135deg,#ff0055,#cc0044); color:#fff; }
 .btn:disabled { opacity:0.4; cursor:not-allowed; transform:none; }
 
-.alert-info { background:rgba(0,255,136,0.08); border:2px solid rgba(0,255,136,0.3); color:#00ff88; padding:12px; border-radius:10px; margin:10px 0; font-size:0.88em; }
-.alert-warning { background:rgba(255,170,0,0.1); border:2px solid rgba(255,170,0,0.4); color:#ffaa00; padding:12px 14px; border-radius:10px; margin:10px 0; font-size:0.88em; }
+.alert-info { background:rgba(0,255,136,0.08); border:2px solid rgba(0,255,136,0.3); color:#00ff88; padding:9px 12px; border-radius:10px; margin:5px 0; font-size:0.84em; }
+.alert-warning { background:rgba(255,170,0,0.1); border:2px solid rgba(255,170,0,0.4); color:#ffaa00; padding:9px 12px; border-radius:10px; margin:5px 0; font-size:0.84em; }
 
-.player-row {
-  display:flex; align-items:center; gap:12px;
-  padding:12px 14px;
-  background:rgba(30,30,46,0.6);
-  border:2px solid rgba(0,255,136,0.15);
-  border-radius:12px; margin-bottom:8px;
-  cursor:pointer; transition: all 0.2s;
-}
+input[type=text] { width:100%; padding:9px 12px; background:rgba(20,20,30,0.8); border:2px solid rgba(0,255,136,0.3); border-radius:10px; color:#e0e0e0; font-size:14px; }
+input:focus { outline:none; border-color:#00ff88; }
+.form-group { margin-bottom:7px; }
+
+.player-row { display:flex; align-items:center; gap:10px; padding:9px 12px; background:rgba(30,30,46,0.6); border:2px solid rgba(0,255,136,0.15); border-radius:12px; margin-bottom:5px; cursor:pointer; transition:all 0.2s; }
 .player-row:hover { border-color:rgba(0,255,136,0.5); background:rgba(0,255,136,0.05); }
 .player-row.done { border-color:rgba(0,255,136,0.4); }
 .player-row.elim { opacity:0.35; cursor:not-allowed; }
-.player-name { flex:1; font-size:1.05em; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-.player-badge { padding:6px 12px; border-radius:20px; font-size:0.8em; font-weight:600; white-space:nowrap; flex-shrink:0; }
+.player-name { flex:1; font-size:0.98em; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.player-badge { padding:5px 10px; border-radius:20px; font-size:0.76em; font-weight:600; white-space:nowrap; flex-shrink:0; }
 .badge-done { background:rgba(0,255,136,0.15); color:#00ff88; border:1.5px solid rgba(0,255,136,0.5); }
 .badge-pending { background:rgba(160,32,240,0.15); color:#c060ff; border:1.5px solid rgba(160,32,240,0.4); }
 .badge-elim { background:rgba(80,80,80,0.3); color:#555; border:1.5px solid #333; }
+.counter { text-align:right; font-size:0.82em; color:#00ff88; font-weight:600; margin-bottom:5px; }
 
-.round-badge { text-align:center; color:#a020f0; font-weight:700; font-size:1.1em; margin-bottom:12px; }
-
-.role-badge { display:block; text-align:center; font-size:1.6em; font-weight:800; padding:14px 20px; border-radius:14px; margin:12px 0; }
+.role-badge { display:block; text-align:center; font-size:clamp(1.1em,3vw,1.4em); font-weight:800; padding:11px 16px; border-radius:13px; margin:7px 0; }
 .role-civilian{color:#00ff88;background:rgba(0,255,136,0.12);border:2.5px solid #00ff88}
 .role-imposter{color:#ff0055;background:rgba(255,0,85,0.12);border:2.5px solid #ff0055}
 .role-jester{color:#ffaa00;background:rgba(255,170,0,0.12);border:2.5px solid #ffaa00}
@@ -582,54 +191,49 @@ input:focus { outline:none; border-color:#00ff88; }
 .role-guardian{color:#00BFFF;background:rgba(0,191,255,0.12);border:2.5px solid #00BFFF}
 .role-saboteur{color:#FF4500;background:rgba(255,69,0,0.12);border:2.5px solid #FF4500}
 
-.question-box { background:rgba(0,0,0,0.3); border:2px solid rgba(255,255,255,0.1); padding:16px; border-radius:12px; margin:12px 0; }
-.question-label { color:#888; font-size:0.8em; margin-bottom:6px; }
-.question-text { font-size:1.15em; font-weight:700; color:#fff; line-height:1.5; }
+.question-box { background:rgba(0,0,0,0.3); border:2px solid rgba(255,255,255,0.1); padding:10px 14px; border-radius:12px; margin:7px 0; }
+.question-label { color:#888; font-size:0.76em; margin-bottom:4px; }
+.question-text { font-size:clamp(0.95em,2.5vw,1.05em); font-weight:700; color:#fff; line-height:1.4; }
 
-.ability-box { padding:14px; border-radius:12px; margin:10px 0; }
+.ability-box { padding:10px 12px; border-radius:12px; margin:7px 0; }
 .ability-detective{background:rgba(78,205,196,0.1);border:2px solid rgba(78,205,196,0.4)}
 .ability-cupid{background:rgba(255,105,180,0.1);border:2px solid rgba(255,105,180,0.4)}
 .ability-bounty{background:rgba(255,140,0,0.1);border:2px solid rgba(255,140,0,0.4)}
 .ability-spy{background:rgba(255,107,107,0.1);border:2px solid rgba(255,107,107,0.4)}
 .ability-guardian{background:rgba(0,191,255,0.1);border:2px solid rgba(0,191,255,0.4)}
 .ability-saboteur{background:rgba(255,69,0,0.1);border:2px solid rgba(255,69,0,0.4)}
-.ability-title{font-size:0.9em;font-weight:700;margin-bottom:8px}
-.ability-detective .ability-title{color:#4ECDC4}
-.ability-cupid .ability-title{color:#FF69B4}
-.ability-bounty .ability-title{color:#FF8C00}
-.ability-spy .ability-title{color:#FF6B6B}
-.ability-guardian .ability-title{color:#00BFFF}
-.ability-saboteur .ability-title{color:#FF4500}
+.ability-title{font-size:0.86em;font-weight:700;margin-bottom:6px}
+.ability-detective .ability-title{color:#4ECDC4} .ability-cupid .ability-title{color:#FF69B4}
+.ability-bounty .ability-title{color:#FF8C00} .ability-spy .ability-title{color:#FF6B6B}
+.ability-guardian .ability-title{color:#00BFFF} .ability-saboteur .ability-title{color:#FF4500}
 
-.target-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:8px}
-.target-btn{padding:10px 8px;border-radius:10px;font-size:0.9em;font-weight:600;cursor:pointer;text-align:center;transition:all 0.2s;background:rgba(30,30,46,0.8);color:#a0a0a0;border:2px solid rgba(100,100,100,0.3)}
+.target-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin-top:7px}
+.target-btn{padding:8px 7px;border-radius:10px;font-size:0.86em;font-weight:600;cursor:pointer;text-align:center;transition:all 0.2s;background:rgba(30,30,46,0.8);color:#a0a0a0;border:2px solid rgba(100,100,100,0.3)}
 .target-btn:hover{border-color:#00ff88;color:#fff}
 .target-btn.selected{background:linear-gradient(135deg,#00ff88,#00cc6a);color:#0a0a1a;border-color:#00ff88}
 
-.result-box{padding:10px 14px;border-radius:10px;margin-top:8px;text-align:center}
+.result-box{padding:8px 12px;border-radius:10px;margin-top:6px;text-align:center}
 .result-detective{background:rgba(78,205,196,0.15);border:2px solid #4ECDC4}
 .result-cupid{background:rgba(255,105,180,0.15);border:2px solid #FF69B4}
 .result-bounty{background:rgba(255,140,0,0.15);border:2px solid #FF8C00}
 .result-guardian{background:rgba(0,191,255,0.15);border:2px solid #00BFFF}
-.result-value{font-size:1.2em;font-weight:800;color:#fff}
+.result-value{font-size:1.05em;font-weight:800;color:#fff}
 
-.timer-box{text-align:center;padding:16px 0}
-.timer-num{font-size:3em;font-weight:800;background:linear-gradient(135deg,#00ff88,#a020f0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.timer-label{color:#888;font-size:0.85em;margin-top:2px}
+.timer-box{text-align:center;padding:6px 0}
+.timer-num{font-size:clamp(2em,6vw,3em);font-weight:800;background:linear-gradient(135deg,#00ff88,#a020f0);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.timer-label{color:#888;font-size:0.8em;margin-top:2px}
 
-.turn-order-box{background:rgba(160,32,240,0.08);border:2px solid rgba(160,32,240,0.3);border-radius:12px;padding:14px;margin-bottom:14px}
-.turn-order-title{color:#a020f0;font-weight:700;font-size:0.9em;margin-bottom:10px}
-.turn-item{display:flex;justify-content:space-between;align-items:center;padding:8px 10px;border-radius:8px;margin-bottom:4px;background:rgba(20,20,35,0.5);border:1.5px solid rgba(0,255,136,0.15)}
+.turn-order-box{background:rgba(160,32,240,0.08);border:2px solid rgba(160,32,240,0.3);border-radius:12px;padding:9px 11px;margin-bottom:7px}
+.turn-order-title{color:#a020f0;font-weight:700;font-size:0.86em;margin-bottom:7px}
+.turn-item{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;border-radius:8px;margin-bottom:3px;background:rgba(20,20,35,0.5);border:1.5px solid rgba(0,255,136,0.15);font-size:0.89em}
 
-.vote-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:12px 0}
-.vote-btn{padding:14px 8px;border-radius:12px;font-size:0.95em;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;background:rgba(30,30,46,0.8);color:#a020f0;border:2.5px solid rgba(160,32,240,0.5)}
+.vote-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:7px;margin:7px 0}
+.vote-btn{padding:11px 8px;border-radius:12px;font-size:0.88em;font-weight:700;cursor:pointer;text-align:center;transition:all 0.2s;background:rgba(30,30,46,0.8);color:#a020f0;border:2.5px solid rgba(160,32,240,0.5)}
 .vote-btn:hover{background:rgba(160,32,240,0.15);border-color:#a020f0}
 .vote-btn.selected{background:linear-gradient(135deg,#a020f0,#7a1bb3);color:#fff}
 
-.counter{text-align:right;font-size:0.85em;color:#00ff88;font-weight:600;margin-bottom:8px}
-
-.reveal-result{text-align:center;padding:20px}
-.reveal-result .big{font-size:1.3em;font-weight:800;padding:12px 20px;border-radius:12px;display:inline-block;margin:10px 0}
+.reveal-result{text-align:center;padding:8px}
+.reveal-result .big{font-size:clamp(0.95em,2.5vw,1.15em);font-weight:800;padding:10px 14px;border-radius:12px;display:inline-block;margin:5px 0}
 .win-positive{color:#00ff88;background:rgba(0,255,136,0.1);border:2px solid #00ff88}
 .win-negative{color:#ff0055;background:rgba(255,0,85,0.1);border:2px solid #ff0055}
 .win-jester{color:#ffaa00;background:rgba(255,170,0,0.1);border:2px solid #ffaa00}
@@ -637,72 +241,66 @@ input:focus { outline:none; border-color:#00ff88; }
 .win-cupid{color:#FF69B4;background:rgba(255,105,180,0.1);border:2px solid #FF69B4}
 .win-guardian{color:#00BFFF;background:rgba(0,191,255,0.1);border:2px solid #00BFFF}
 
-.role-reveal-row{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(20,20,35,0.5);border-radius:8px;border:1.5px solid rgba(255,255,255,0.07)}
-.score-row{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:rgba(20,20,35,0.5);border-radius:10px;margin-bottom:6px;border:1.5px solid rgba(0,255,136,0.15)}
+.role-reveal-row{display:flex;justify-content:space-between;align-items:center;padding:6px 10px;background:rgba(20,20,35,0.5);border-radius:8px;border:1.5px solid rgba(255,255,255,0.07);margin-bottom:4px;font-size:0.88em}
+.score-row{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:rgba(20,20,35,0.5);border-radius:10px;margin-bottom:5px;border:1.5px solid rgba(0,255,136,0.15)}
 .score-row.top{border-color:rgba(0,255,136,0.5);box-shadow:0 0 12px rgba(0,255,136,0.15)}
 
-.saboteur-drag{background:rgba(255,69,0,0.08);border:2px solid rgba(255,69,0,0.4);border-radius:12px;padding:16px;margin:12px 0}
-.saboteur-drag h3{color:#FF4500;font-size:1em;margin-bottom:10px}
-.form-group{margin-bottom:10px}
+.saboteur-drag{background:rgba(255,69,0,0.08);border:2px solid rgba(255,69,0,0.4);border-radius:12px;padding:11px;margin:5px 0}
+.saboteur-drag h3{color:#FF4500;font-size:0.92em;margin-bottom:7px}
 </style>
 </head>
 <body>
 
-<!-- MODERN SETUP SCREEN -->
+<!-- SETUP SCREEN -->
 <div id="setupScreen" class="screen active">
-  <div class="setup-wrapper">
-    <div class="setup-header">
-      <h1>🎭 Suspect</h1>
-    </div>
+  <div class="setup-wrap">
+    <div class="setup-header"><h1>🎭 Suspect</h1></div>
 
     <div id="setupAlert" class="setup-alert"></div>
 
-    <!-- Player Slider -->
-    <div class="slider-card">
+    <div class="setup-card">
       <div class="player-count-display">
         <div class="player-count-label">Pemain</div>
         <div class="player-count-number" id="playerCountDisplay">5</div>
       </div>
       <div class="slider-container">
         <input type="range" id="playerSlider" min="3" max="10" value="5" oninput="updatePlayerCount(this.value)">
-        <div class="slider-labels">
-          <span>3</span>
-          <span>10</span>
+        <div class="slider-labels"><span>3</span><span>10</span></div>
+      </div>
+    </div>
+
+    <div class="setup-card">
+      <div class="counter-row">
+        <div class="ctr-info">
+          <div class="ctr-label">🔴 Assassin</div>
+          <div class="ctr-val-red" id="assassinCount">1</div>
+        </div>
+        <div class="ctr-btns">
+          <button class="ctr-btn" id="assassinMinus" onclick="changeAssassinCount(-1)">−</button>
+          <button class="ctr-btn" id="assassinPlus" onclick="changeAssassinCount(1)">+</button>
         </div>
       </div>
     </div>
 
-    <!-- Assassin Counter -->
-    <div class="assassin-counter-card">
-      <div class="assassin-info">
-        <div class="assassin-label">🔴 Assassin</div>
-        <div class="assassin-count" id="assassinCount">1</div>
-      </div>
-      <div class="counter-controls">
-        <button class="counter-btn" id="assassinMinus" onclick="changeAssassinCount(-1)">−</button>
-        <button class="counter-btn" id="assassinPlus" onclick="changeAssassinCount(1)">+</button>
+    <div class="setup-card">
+      <div class="counter-row">
+        <div class="ctr-info">
+          <div class="ctr-label">⏱️ Waktu Diskusi (menit)</div>
+          <div class="ctr-val-white" id="timeDisplay">5</div>
+        </div>
+        <div class="ctr-btns">
+          <button class="ctr-btn" id="timeMinus" onclick="changeTime(-1)">−</button>
+          <button class="ctr-btn" id="timePlus" onclick="changeTime(1)">+</button>
+        </div>
       </div>
     </div>
 
-    <!-- Roles Button -->
-    <div class="roles-btn" onclick="openRolesModal()">
-      <div class="roles-btn-content">
-        <span class="roles-btn-icon">🎭</span>
-        <span class="roles-btn-text">Tambahkan peran khusus</span>
+    <div class="setup-card roles-row" onclick="openRolesModal()">
+      <div class="roles-row-left">
+        <span class="roles-icon">🎭</span>
+        <span class="roles-text">Tambahkan peran khusus</span>
       </div>
-      <span class="roles-btn-arrow">→</span>
-    </div>
-
-    <!-- Discussion Time Counter -->
-    <div class="assassin-counter-card">
-      <div class="assassin-info">
-        <div class="assassin-label">⏱️ Waktu Diskusi</div>
-        <div class="time-count" id="timeDisplay">5</div>
-      </div>
-      <div class="counter-controls">
-        <button class="counter-btn" id="timeMinus" onclick="changeTime(-1)">−</button>
-        <button class="counter-btn" id="timePlus" onclick="changeTime(1)">+</button>
-      </div>
+      <span class="roles-arrow">→</span>
     </div>
 
     <button class="start-btn" onclick="startGameSetup()">Mulai</button>
@@ -717,858 +315,465 @@ input:focus { outline:none; border-color:#00ff88; }
       </div>
       <div class="modal-body">
         <div class="roles-list">
-        <div class="role-item" onclick="toggleCheckbox('chkDetective')">
-          <div class="role-info">
-            <div class="role-icon">🔍</div>
-            <div class="role-details">
-              <div class="role-name">Detective</div>
-              <div class="role-desc">Investigasi 1 pemain sebelum voting</div>
-            </div>
-          </div>
-          <div class="checkbox-wrapper">
-            <input type="checkbox" id="chkDetective" class="role-checkbox">
-            <label for="chkDetective" class="checkbox-toggle" onclick="event.stopPropagation()"></label>
-          </div>
-        </div>
-
-        <div class="role-item" onclick="toggleCheckbox('chkSheriff')">
-          <div class="role-info">
-            <div class="role-icon">👮</div>
-            <div class="role-details">
-              <div class="role-name">Sheriff</div>
-              <div class="role-desc">Vote dihitung 2x</div>
-            </div>
-          </div>
-          <div class="checkbox-wrapper">
-            <input type="checkbox" id="chkSheriff" class="role-checkbox">
-            <label for="chkSheriff" class="checkbox-toggle" onclick="event.stopPropagation()"></label>
-          </div>
-        </div>
-
-        <div class="role-item" onclick="toggleCheckbox('chkPhantom')">
-          <div class="role-info">
-            <div class="role-icon">👻</div>
-            <div class="role-details">
-              <div class="role-name">Phantom</div>
-              <div class="role-desc">Bisa vote meski sudah mati</div>
-            </div>
-          </div>
-          <div class="checkbox-wrapper">
-            <input type="checkbox" id="chkPhantom" class="role-checkbox">
-            <label for="chkPhantom" class="checkbox-toggle" onclick="event.stopPropagation()"></label>
-          </div>
-        </div>
-
-        <div class="role-item" onclick="toggleCheckbox('chkGuardian')">
-          <div class="role-info">
-            <div class="role-icon">🛡️</div>
-            <div class="role-details">
-              <div class="role-name">Guardian</div>
-              <div class="role-desc">Lindungi 1 pemain dari eliminasi</div>
-            </div>
-          </div>
-          <div class="checkbox-wrapper">
-            <input type="checkbox" id="chkGuardian" class="role-checkbox">
-            <label for="chkGuardian" class="checkbox-toggle" onclick="event.stopPropagation()"></label>
-          </div>
-        </div>
-
-        <div class="role-item" onclick="toggleCheckbox('chkSpy')">
-          <div class="role-info">
-            <div class="role-icon">🕵️</div>
-            <div class="role-details">
-              <div class="role-name">Spy</div>
-              <div class="role-desc">Tahu semua Citizen di awal</div>
-            </div>
-          </div>
-          <div class="checkbox-wrapper">
-            <input type="checkbox" id="chkSpy" class="role-checkbox">
-            <label for="chkSpy" class="checkbox-toggle" onclick="event.stopPropagation()"></label>
-          </div>
-        </div>
-
-        <div class="role-item" onclick="toggleCheckbox('chkSaboteur')">
-          <div class="role-info">
-            <div class="role-icon">💣</div>
-            <div class="role-details">
-              <div class="role-name">Saboteur</div>
-              <div class="role-desc">Drag 1 pemain saat tereliminasi</div>
-            </div>
-          </div>
-          <div class="checkbox-wrapper">
-            <input type="checkbox" id="chkSaboteur" class="role-checkbox">
-            <label for="chkSaboteur" class="checkbox-toggle" onclick="event.stopPropagation()"></label>
-          </div>
-        </div>
-
-        <div class="role-item" onclick="toggleCheckbox('chkJester')">
-          <div class="role-info">
-            <div class="role-icon">🤡</div>
-            <div class="role-details">
-              <div class="role-name">Jester</div>
-              <div class="role-desc">Menang jika berhasil di-vote</div>
-            </div>
-          </div>
-          <div class="checkbox-wrapper">
-            <input type="checkbox" id="chkJester" class="role-checkbox">
-            <label for="chkJester" class="checkbox-toggle" onclick="event.stopPropagation()"></label>
-          </div>
-        </div>
-
-        <div class="role-item" onclick="toggleCheckbox('chkCupid')">
-          <div class="role-info">
-            <div class="role-icon">💘</div>
-            <div class="role-details">
-              <div class="role-name">Cupid</div>
-              <div class="role-desc">Link 2 pemain (mati bersama)</div>
-            </div>
-          </div>
-          <div class="checkbox-wrapper">
-            <input type="checkbox" id="chkCupid" class="role-checkbox">
-            <label for="chkCupid" class="checkbox-toggle" onclick="event.stopPropagation()"></label>
-          </div>
-        </div>
-
-        <div class="role-item" onclick="toggleCheckbox('chkBounty')">
-          <div class="role-info">
-            <div class="role-icon">🎯</div>
-            <div class="role-details">
-              <div class="role-name">Bounty Hunter</div>
-              <div class="role-desc">Eliminasi target rahasia untuk menang</div>
-            </div>
-          </div>
-          <div class="checkbox-wrapper">
-            <input type="checkbox" id="chkBounty" class="role-checkbox">
-            <label for="chkBounty" class="checkbox-toggle" onclick="event.stopPropagation()"></label>
-          </div>
-        </div>
+          <div class="role-item" onclick="toggleCheckbox('chkDetective')"><div class="role-info"><div class="role-icon">🔍</div><div><div class="role-name">Detective</div><div class="role-desc">Investigasi 1 pemain sebelum voting</div></div></div><div style="position:relative"><input type="checkbox" id="chkDetective" class="role-checkbox"><label for="chkDetective" class="checkbox-toggle" onclick="event.stopPropagation()"></label></div></div>
+          <div class="role-item" onclick="toggleCheckbox('chkSheriff')"><div class="role-info"><div class="role-icon">👮</div><div><div class="role-name">Sheriff</div><div class="role-desc">Vote dihitung 2x</div></div></div><div style="position:relative"><input type="checkbox" id="chkSheriff" class="role-checkbox"><label for="chkSheriff" class="checkbox-toggle" onclick="event.stopPropagation()"></label></div></div>
+          <div class="role-item" onclick="toggleCheckbox('chkPhantom')"><div class="role-info"><div class="role-icon">👻</div><div><div class="role-name">Phantom</div><div class="role-desc">Bisa vote meski sudah mati</div></div></div><div style="position:relative"><input type="checkbox" id="chkPhantom" class="role-checkbox"><label for="chkPhantom" class="checkbox-toggle" onclick="event.stopPropagation()"></label></div></div>
+          <div class="role-item" onclick="toggleCheckbox('chkGuardian')"><div class="role-info"><div class="role-icon">🛡️</div><div><div class="role-name">Guardian</div><div class="role-desc">Lindungi 1 pemain dari eliminasi</div></div></div><div style="position:relative"><input type="checkbox" id="chkGuardian" class="role-checkbox"><label for="chkGuardian" class="checkbox-toggle" onclick="event.stopPropagation()"></label></div></div>
+          <div class="role-item" onclick="toggleCheckbox('chkSpy')"><div class="role-info"><div class="role-icon">🕵️</div><div><div class="role-name">Spy</div><div class="role-desc">Tahu semua Citizen di awal</div></div></div><div style="position:relative"><input type="checkbox" id="chkSpy" class="role-checkbox"><label for="chkSpy" class="checkbox-toggle" onclick="event.stopPropagation()"></label></div></div>
+          <div class="role-item" onclick="toggleCheckbox('chkSaboteur')"><div class="role-info"><div class="role-icon">💣</div><div><div class="role-name">Saboteur</div><div class="role-desc">Drag 1 pemain saat tereliminasi</div></div></div><div style="position:relative"><input type="checkbox" id="chkSaboteur" class="role-checkbox"><label for="chkSaboteur" class="checkbox-toggle" onclick="event.stopPropagation()"></label></div></div>
+          <div class="role-item" onclick="toggleCheckbox('chkJester')"><div class="role-info"><div class="role-icon">🤡</div><div><div class="role-name">Jester</div><div class="role-desc">Menang jika berhasil di-vote</div></div></div><div style="position:relative"><input type="checkbox" id="chkJester" class="role-checkbox"><label for="chkJester" class="checkbox-toggle" onclick="event.stopPropagation()"></label></div></div>
+          <div class="role-item" onclick="toggleCheckbox('chkCupid')"><div class="role-info"><div class="role-icon">💘</div><div><div class="role-name">Cupid</div><div class="role-desc">Link 2 pemain (mati bersama)</div></div></div><div style="position:relative"><input type="checkbox" id="chkCupid" class="role-checkbox"><label for="chkCupid" class="checkbox-toggle" onclick="event.stopPropagation()"></label></div></div>
+          <div class="role-item" onclick="toggleCheckbox('chkBounty')"><div class="role-info"><div class="role-icon">🎯</div><div><div class="role-name">Bounty Hunter</div><div class="role-desc">Eliminasi target rahasia untuk menang</div></div></div><div style="position:relative"><input type="checkbox" id="chkBounty" class="role-checkbox"><label for="chkBounty" class="checkbox-toggle" onclick="event.stopPropagation()"></label></div></div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-<!-- Copy all other screens from original file -->
-<div class="container">
-  <div id="namesScreen" class="screen">
-    <div class="card">
-      <h2 style="text-align:center;">👥 Nama Pemain</h2>
-      <div id="nameDist" class="alert-info" style="margin-bottom:12px;"></div>
-      <div id="nameInputs"></div>
-      <button class="btn btn-primary" onclick="startRound()">Siap Main! →</button>
+<!-- NAMES SCREEN -->
+<div id="namesScreen" class="screen">
+  <div class="game-wrap">
+    <div class="game-card">
+      <div class="gc-head">
+        <div class="screen-title">👥 Nama Pemain</div>
+        <div id="nameDist" class="alert-info" style="margin:0;"></div>
+      </div>
+      <div class="gc-body" id="nameInputs"></div>
+      <div class="gc-foot">
+        <button class="btn btn-primary" onclick="startRound()">Siap Main! →</button>
+      </div>
     </div>
   </div>
+</div>
 
-  <div id="revealScreen" class="screen">
-    <div class="card">
-      <div class="round-badge" id="revealRound">Round 1</div>
-      <h2 style="text-align:center;">🎭 Lihat Role Anda</h2>
-      <div class="alert-warning">⚠️ Jangan biarkan orang lain melihat role Anda!</div>
-      <div class="counter"><span id="revealCount">0</span>/<span id="revealTotal">0</span> ✓</div>
-      <div id="playerList"></div>
-      <div id="roleRevealPanel" style="display:none;">
-        <div style="text-align:center;margin:10px 0;">
-          <span id="revealingName" style="color:#00ff88;font-size:1.1em;font-weight:700;"></span>
+<!-- REVEAL SCREEN -->
+<div id="revealScreen" class="screen">
+  <div class="game-wrap">
+    <div class="game-card">
+      <div class="gc-head">
+        <div class="round-badge" id="revealRound">Round 1</div>
+        <div class="screen-title" style="margin-bottom:4px;">🎭 Lihat Role Anda</div>
+        <div class="alert-warning" style="margin:0 0 4px;">⚠️ Jangan biarkan orang lain melihat!</div>
+        <div class="counter" id="revealCounter"><span id="revealCount">0</span>/<span id="revealTotal">0</span> ✓</div>
+      </div>
+      <div class="gc-body">
+        <div id="playerList"></div>
+        <div id="roleRevealPanel" style="display:none;">
+          <div style="text-align:center;margin:5px 0;"><span id="revealingName" style="color:#00ff88;font-size:1em;font-weight:700;"></span></div>
+          <div id="roleBadge" class="role-badge"></div>
+          <div id="abilityPanel"></div>
+          <div class="question-box">
+            <div class="question-label">Pertanyaan Anda:</div>
+            <div class="question-text" id="revealQuestion"></div>
+          </div>
+          <div id="roleTipBox" class="alert-info" style="margin:5px 0;"></div>
+          <div id="abilityWarning" class="alert-warning" style="display:none;">⚠️ Gunakan ability Anda terlebih dahulu!</div>
         </div>
-        <div id="roleBadge" class="role-badge"></div>
-        <div id="abilityPanel"></div>
-        <div class="question-box">
-          <div class="question-label">Pertanyaan Anda:</div>
-          <div class="question-text" id="revealQuestion"></div>
+      </div>
+      <div class="gc-foot">
+        <button class="btn btn-secondary" id="closeRevealBtn" style="display:none;" onclick="closeReveal()">✓ Sudah Hafal</button>
+        <button class="btn btn-primary" id="startDiscBtn" style="display:none;" onclick="startDiscussion()">🎮 Mulai Diskusi</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- DISCUSSION SCREEN -->
+<div id="discScreen" class="screen">
+  <div class="game-wrap">
+    <div class="game-card">
+      <div class="gc-head">
+        <div class="round-badge" id="discRound">Round 1</div>
+        <div class="question-box" style="margin:0;">
+          <div class="question-label">📝 Pertanyaan:</div>
+          <div class="question-text" id="discQuestion"></div>
         </div>
-        <div id="roleTipBox" class="alert-info" style="margin:8px 0;"></div>
-        <div id="abilityWarning" class="alert-warning" style="display:none;">⚠️ Gunakan ability Anda terlebih dahulu!</div>
-        <button class="btn btn-secondary" id="closeRevealBtn" onclick="closeReveal()">✓ Sudah Hafal</button>
       </div>
-      <button class="btn btn-primary" id="startDiscBtn" style="display:none;margin-top:12px;" onclick="startDiscussion()">🎮 Mulai Diskusi</button>
+      <div class="gc-body">
+        <div class="turn-order-box">
+          <div class="turn-order-title">🎯 Urutan Bicara</div>
+          <div id="turnList"></div>
+        </div>
+        <div class="alert-info">💡 Ikuti urutan bicara. Perhatikan jawaban yang mencurigakan!</div>
+        <div class="timer-box">
+          <div class="timer-num" id="timerDisplay">5:00</div>
+          <div class="timer-label">Waktu Tersisa</div>
+        </div>
+      </div>
+      <div class="gc-foot">
+        <button class="btn btn-primary" onclick="goToVoting()">🗳️ Mulai Voting</button>
+        <button class="btn btn-danger" onclick="resetGame()">↺ Reset</button>
+      </div>
     </div>
   </div>
+</div>
 
-  <div id="discScreen" class="screen">
-    <div class="card">
-      <div class="round-badge" id="discRound">Round 1</div>
-      <div class="question-box" style="margin-bottom:14px;">
-        <div class="question-label">📝 Pertanyaan:</div>
-        <div class="question-text" id="discQuestion"></div>
+<!-- VOTE SCREEN -->
+<div id="voteScreen" class="screen">
+  <div class="game-wrap">
+    <div class="game-card">
+      <div class="gc-head">
+        <div class="round-badge" id="voteRound">Round 1 - Voting</div>
+        <div id="guardianInfo" style="display:none;" class="ability-box ability-guardian" style="margin:0;">
+          <div class="ability-title">🛡️ Guardian melindungi:</div>
+          <div id="guardianInfoText" style="color:#fff;font-size:0.92em;"></div>
+        </div>
+        <div class="alert-warning" id="voterInfo" style="margin:0;">Giliran voting...</div>
       </div>
-      <div class="turn-order-box">
-        <div class="turn-order-title">🎯 Urutan Bicara</div>
-        <div id="turnList"></div>
+      <div class="gc-body">
+        <div id="voterPanel">
+          <div class="vote-grid" id="voteButtons"></div>
+        </div>
+        <button class="btn btn-primary" id="seeResultBtn" style="display:none;margin-top:8px;" onclick="showResults()">📊 Lihat Hasil</button>
       </div>
-      <div class="alert-info">💡 Ikuti urutan bicara. Perhatikan jawaban yang mencurigakan!</div>
-      <div class="timer-box">
-        <div class="timer-num" id="timerDisplay">5:00</div>
-        <div class="timer-label">Waktu Tersisa</div>
-      </div>
-      <button class="btn btn-primary" onclick="goToVoting()">🗳️ Mulai Voting</button>
-      <button class="btn btn-danger" style="margin-top:8px;" onclick="resetGame()">↺ Reset</button>
-    </div>
-  </div>
-
-  <div id="voteScreen" class="screen">
-    <div class="card">
-      <div class="round-badge" id="voteRound">Round 1 - Voting</div>
-      <div id="guardianInfo" style="display:none;" class="ability-box ability-guardian">
-        <div class="ability-title">🛡️ Guardian melindungi:</div>
-        <div id="guardianInfoText" style="color:#fff;font-size:1em;"></div>
-      </div>
-      <div id="voterPanel">
-        <div class="alert-warning" id="voterInfo">Giliran voting...</div>
-        <div class="vote-grid" id="voteButtons"></div>
+      <div class="gc-foot">
         <button class="btn btn-primary" id="confirmVoteBtn" style="display:none;" onclick="submitVote()">✓ Konfirmasi Vote</button>
+        <button class="btn btn-secondary" onclick="backToDiscussion()">← Kembali</button>
       </div>
-      <button class="btn btn-primary" id="seeResultBtn" style="display:none;" onclick="showResults()">📊 Lihat Hasil</button>
-      <button class="btn btn-secondary" style="margin-top:8px;" onclick="backToDiscussion()">← Kembali</button>
     </div>
   </div>
+</div>
 
-  <div id="saboteurScreen" class="screen">
-    <div class="card">
-      <div class="round-badge">💣 Saboteur Tereliminasi!</div>
-      <div class="saboteur-drag">
-        <h3>Pilih 1 pemain untuk ikut tereliminasi:</h3>
-        <div class="vote-grid" id="saboteurTargets"></div>
+<!-- SABOTEUR SCREEN -->
+<div id="saboteurScreen" class="screen">
+  <div class="game-wrap">
+    <div class="game-card">
+      <div class="gc-head">
+        <div class="round-badge">💣 Saboteur Tereliminasi!</div>
       </div>
-      <button class="btn btn-danger" id="saboteurConfirmBtn" style="display:none;" onclick="confirmSaboteur()">💥 Konfirmasi</button>
+      <div class="gc-body">
+        <div class="saboteur-drag">
+          <h3>Pilih 1 pemain untuk ikut tereliminasi:</h3>
+          <div class="vote-grid" id="saboteurTargets"></div>
+        </div>
+      </div>
+      <div class="gc-foot">
+        <button class="btn btn-danger" id="saboteurConfirmBtn" style="display:none;" onclick="confirmSaboteur()">💥 Konfirmasi</button>
+      </div>
     </div>
   </div>
+</div>
 
-  <div id="resultScreen" class="screen">
-    <div class="card">
-      <div class="round-badge" id="resultRound">Round 1 - Hasil</div>
-      <div class="reveal-result">
-        <div id="eliminatedInfo" style="background:rgba(160,32,240,0.15);border:2px solid #a020f0;padding:16px;border-radius:14px;margin-bottom:14px;font-size:1.1em;font-weight:700;"></div>
-        <div id="roundWinner"></div>
+<!-- RESULT SCREEN -->
+<div id="resultScreen" class="screen">
+  <div class="game-wrap">
+    <div class="game-card">
+      <div class="gc-head">
+        <div class="round-badge" id="resultRound">Round 1 - Hasil</div>
       </div>
-      <button class="btn btn-primary" id="nextRoundBtn" onclick="nextRound()">▶ Round Berikutnya</button>
-      <button class="btn btn-primary" id="finalBtn" style="display:none;" onclick="showFinal()">🏆 Lihat Hasil Akhir</button>
-      <button class="btn btn-danger" style="margin-top:8px;" onclick="resetGame()">↺ Reset</button>
+      <div class="gc-body">
+        <div id="eliminatedInfo" style="background:rgba(160,32,240,0.15);border:2px solid #a020f0;padding:13px;border-radius:14px;margin-bottom:9px;font-size:0.98em;font-weight:700;"></div>
+        <div id="roundWinner" class="reveal-result"></div>
+      </div>
+      <div class="gc-foot">
+        <button class="btn btn-primary" id="nextRoundBtn" onclick="nextRound()">▶ Round Berikutnya</button>
+        <button class="btn btn-primary" id="finalBtn" style="display:none;" onclick="showFinal()">🏆 Lihat Hasil Akhir</button>
+        <button class="btn btn-danger" onclick="resetGame()">↺ Reset</button>
+      </div>
     </div>
   </div>
+</div>
 
-  <div id="finalScreen" class="screen">
-    <div class="card">
-      <h2 style="text-align:center;font-size:1.5em;margin-bottom:16px;">🏆 Hasil Akhir 🏆</h2>
-      <div id="finalWinner" style="text-align:center;font-size:1.3em;font-weight:800;padding:16px;border-radius:14px;margin-bottom:16px;"></div>
-      <div id="finalScores"></div>
-      <button class="btn btn-primary" onclick="resetGame()" style="margin-bottom:20px;">🔄 Main Lagi</button>
-      <div id="roundHistory"></div>
+<!-- FINAL SCREEN -->
+<div id="finalScreen" class="screen">
+  <div class="game-wrap">
+    <div class="game-card">
+      <div class="gc-head">
+        <div class="screen-title" style="font-size:1.15em;">🏆 Hasil Akhir 🏆</div>
+        <div id="finalWinner" style="text-align:center;font-size:1.05em;font-weight:800;padding:10px;border-radius:13px;margin-bottom:0;color:#00ff88;background:rgba(0,255,136,0.1);border:2px solid #00ff88;"></div>
+      </div>
+      <div class="gc-body">
+        <div id="finalScores"></div>
+        <div id="roundHistory" style="margin-top:8px;"></div>
+      </div>
+      <div class="gc-foot">
+        <button class="btn btn-primary" onclick="resetGame()">🔄 Main Lagi</button>
+      </div>
     </div>
   </div>
 </div>
 
 <script>
-// Copy COMPLETE JavaScript from original file below
-const QUESTIONS = [
-  { p:"Olahraga apa yang paling kamu suka?", n:"Olahraga apa yang paling kamu benci?", j:"Olahraga apa yang paling aneh menurutmu?" },
-  { p:"Negara mana yang paling pengen kamu kunjungi?", n:"Negara mana yang paling tidak mau kamu kunjungi?", j:"Negara mana yang paling unik menurutmu?" },
-  { p:"Makanan apa yang paling kamu suka?", n:"Makanan apa yang paling kamu benci?", j:"Makanan apa yang paling kontroversial?" },
-  { p:"Film genre apa yang paling kamu suka?", n:"Film genre apa yang paling membosankan?", j:"Film genre apa yang paling overrated?" },
-  { p:"Hewan apa yang paling lucu menurutmu?", n:"Hewan apa yang paling menyeramkan?", j:"Hewan apa yang paling misunderstood?" },
-  { p:"Game apa yang paling seru menurutmu?", n:"Game apa yang paling overrated?", j:"Game apa yang paling kontroversial?" },
-  { p:"Warna apa yang paling kamu suka?", n:"Warna apa yang paling jelek menurutmu?", j:"Warna apa yang paling unik?" },
-  { p:"Musim apa yang paling kamu suka?", n:"Musim apa yang paling tidak nyaman?", j:"Musim apa yang paling unpopular?" },
-  { p:"Aplikasi apa yang paling sering kamu pakai?", n:"Aplikasi apa yang paling membosankan?", j:"Aplikasi apa yang paling toxic?" },
-  { p:"Hobi apa yang paling menyenangkan?", n:"Hobi apa yang paling membosankan?", j:"Hobi apa yang paling weird tapi menarik?" }
+const QUESTIONS=[
+  {p:"Olahraga apa yang paling kamu suka?",n:"Olahraga apa yang paling kamu benci?",j:"Olahraga apa yang paling aneh menurutmu?"},
+  {p:"Negara mana yang paling pengen kamu kunjungi?",n:"Negara mana yang paling tidak mau kamu kunjungi?",j:"Negara mana yang paling unik menurutmu?"},
+  {p:"Makanan apa yang paling kamu suka?",n:"Makanan apa yang paling kamu benci?",j:"Makanan apa yang paling kontroversial?"},
+  {p:"Film genre apa yang paling kamu suka?",n:"Film genre apa yang paling membosankan?",j:"Film genre apa yang paling overrated?"},
+  {p:"Hewan apa yang paling lucu menurutmu?",n:"Hewan apa yang paling menyeramkan?",j:"Hewan apa yang paling misunderstood?"},
+  {p:"Game apa yang paling seru menurutmu?",n:"Game apa yang paling overrated?",j:"Game apa yang paling kontroversial?"},
+  {p:"Warna apa yang paling kamu suka?",n:"Warna apa yang paling jelek menurutmu?",j:"Warna apa yang paling unik?"},
+  {p:"Musim apa yang paling kamu suka?",n:"Musim apa yang paling tidak nyaman?",j:"Musim apa yang paling unpopular?"},
+  {p:"Aplikasi apa yang paling sering kamu pakai?",n:"Aplikasi apa yang paling membosankan?",j:"Aplikasi apa yang paling toxic?"},
+  {p:"Hobi apa yang paling menyenangkan?",n:"Hobi apa yang paling membosankan?",j:"Hobi apa yang paling weird tapi menarik?"}
 ];
 
-let cfg={}, names=[], scores=[], roles=[];
-let round=1, usedQ=[], curQ=null, qSwap=false;
-let checkedSet=new Set(), eliminated=[], curRevealIdx=null, roundHistory=[];
-let turnOrder=[], voteOrder=[], voteIdx=0, votes=[], selectedVote=null;
-let detectiveIdx=-1, detectiveTarget=null, detectiveRevealedRole=null;
-let cupidIdx=-1, cupidSelections=[], linked=[];
-let bountyIdx=-1, bountyTarget=null;
-let guardianIdx=-1, guardianTarget=null;
-let tricksterIdx=-1, tricksterSwapTarget=null;
-let saboteurIdx=-1, saboteurDragTarget=null, pendingElimIdx=-1;
+let cfg={},names=[],scores=[],roles=[];
+let round=1,usedQ=[],curQ=null,qSwap=false;
+let checkedSet=new Set(),eliminated=[],curRevealIdx=null,roundHistory=[];
+let turnOrder=[],voteOrder=[],voteIdx=0,votes=[],selectedVote=null;
+let detectiveIdx=-1,detectiveTarget=null,detectiveRevealedRole=null;
+let cupidIdx=-1,cupidSelections=[],linked=[];
+let bountyIdx=-1,bountyTarget=null;
+let guardianIdx=-1,guardianTarget=null;
+let saboteurIdx=-1,saboteurDragTarget=null,pendingElimIdx=-1;
 let timerInterval=null;
+let playerCount=5,assassinCount=1,discussionTime=5;
 
-// Modern setup functions
-let playerCount = 5;
-let assassinCount = 1;
-let discussionTime = 5;
-
-function updatePlayerCount(value) {
-  playerCount = parseInt(value);
-  document.getElementById('playerCountDisplay').textContent = playerCount;
-  
-  // Update max assassins based on player count
-  const specialCount = getSpecialRolesCount();
-  const maxImp = Math.max(1, Math.floor((playerCount - specialCount) * 2 / 5));
-  
-  if (assassinCount > maxImp) {
-    assassinCount = maxImp;
-    document.getElementById('assassinCount').textContent = assassinCount;
-  }
-  
+function updatePlayerCount(v){
+  playerCount=parseInt(v);
+  document.getElementById('playerCountDisplay').textContent=playerCount;
+  const mx=Math.max(1,Math.floor((playerCount-getSpecialRolesCount())*2/5));
+  if(assassinCount>mx){assassinCount=mx;document.getElementById('assassinCount').textContent=assassinCount;}
   updateAssassinButtons();
 }
-
-function changeAssassinCount(delta) {
-  const specialCount = getSpecialRolesCount();
-  const maxImp = Math.max(1, Math.floor((playerCount - specialCount) * 2 / 5));
-  
-  assassinCount += delta;
-  
-  if (assassinCount < 1) assassinCount = 1;
-  if (assassinCount > maxImp) assassinCount = maxImp;
-  
-  document.getElementById('assassinCount').textContent = assassinCount;
+function changeAssassinCount(d){
+  const mx=Math.max(1,Math.floor((playerCount-getSpecialRolesCount())*2/5));
+  assassinCount=Math.min(mx,Math.max(1,assassinCount+d));
+  document.getElementById('assassinCount').textContent=assassinCount;
   updateAssassinButtons();
 }
-
-function changeTime(delta) {
-  discussionTime += delta;
-  if (discussionTime < 1) discussionTime = 1;
-  if (discussionTime > 10) discussionTime = 10;
-  document.getElementById('timeDisplay').textContent = discussionTime;
-  updateTimeButtons();
+function updateAssassinButtons(){
+  const mx=Math.max(1,Math.floor((playerCount-getSpecialRolesCount())*2/5));
+  document.getElementById('assassinMinus').disabled=assassinCount<=1;
+  document.getElementById('assassinPlus').disabled=assassinCount>=mx;
 }
-
-function updateTimeButtons() {
-  document.getElementById('timeMinus').disabled = discussionTime <= 1;
-  document.getElementById('timePlus').disabled = discussionTime >= 10;
+function changeTime(d){
+  discussionTime=Math.min(10,Math.max(1,discussionTime+d));
+  document.getElementById('timeDisplay').textContent=discussionTime;
+  document.getElementById('timeMinus').disabled=discussionTime<=1;
+  document.getElementById('timePlus').disabled=discussionTime>=10;
 }
-
-function getSpecialRolesCount() {
-  return (document.getElementById('chkDetective').checked ? 1 : 0) +
-         (document.getElementById('chkSheriff').checked ? 1 : 0) +
-         (document.getElementById('chkPhantom').checked ? 1 : 0) +
-         (document.getElementById('chkGuardian').checked ? 1 : 0) +
-         (document.getElementById('chkSpy').checked ? 1 : 0) +
-         (document.getElementById('chkSaboteur').checked ? 1 : 0) +
-         (document.getElementById('chkJester').checked ? 1 : 0) +
-         (document.getElementById('chkCupid').checked ? 1 : 0) +
-         (document.getElementById('chkBounty').checked ? 1 : 0);
+function getSpecialRolesCount(){
+  return['chkDetective','chkSheriff','chkPhantom','chkGuardian','chkSpy','chkSaboteur','chkJester','chkCupid','chkBounty'].filter(id=>document.getElementById(id).checked).length;
 }
-
-function openRolesModal() {
-  document.getElementById('rolesModal').classList.add('active');
-}
-
-function closeRolesModal(event) {
-  if (!event || event.target.classList.contains('modal-overlay') || event.target.classList.contains('modal-close')) {
+function openRolesModal(){document.getElementById('rolesModal').classList.add('active');}
+function closeRolesModal(e){
+  if(!e||e.target.classList.contains('modal-overlay')||e.target.classList.contains('modal-close'))
     document.getElementById('rolesModal').classList.remove('active');
-  }
 }
+function toggleCheckbox(id){document.getElementById(id).checked=!document.getElementById(id).checked;updateAssassinButtons();}
 
-function toggleCheckbox(id) {
-  const checkbox = document.getElementById(id);
-  checkbox.checked = !checkbox.checked;
-  updateAssassinButtons();
-}
-
-function startGameSetup() {
-  const alert = document.getElementById('setupAlert');
-  
-  const specialCount = getSpecialRolesCount();
-  
-  if (specialCount + assassinCount >= playerCount) {
-    alert.textContent = '⚠️ Terlalu banyak role khusus!';
-    alert.className = 'setup-alert error active';
-    setTimeout(() => alert.classList.remove('active'), 3000);
-    return;
+function startGameSetup(){
+  const al=document.getElementById('setupAlert');
+  if(getSpecialRolesCount()+assassinCount>=playerCount){
+    al.textContent='⚠️ Terlalu banyak role khusus!';al.className='setup-alert error';
+    setTimeout(()=>{al.className='setup-alert';},3000);return;
   }
-
-  cfg = {
-    p: playerCount,
-    rounds: 3,
-    time: discussionTime,
-    imp: assassinCount,
-    det: document.getElementById('chkDetective').checked ? 1 : 0,
-    sher: document.getElementById('chkSheriff').checked ? 1 : 0,
-    phan: document.getElementById('chkPhantom').checked ? 1 : 0,
-    grd: document.getElementById('chkGuardian').checked ? 1 : 0,
-    spy: document.getElementById('chkSpy').checked ? 1 : 0,
-    sab: document.getElementById('chkSaboteur').checked ? 1 : 0,
-    jest: document.getElementById('chkJester').checked ? 1 : 0,
-    cup: document.getElementById('chkCupid').checked ? 1 : 0,
-    bnt: document.getElementById('chkBounty').checked ? 1 : 0
-  };
-
+  cfg={p:playerCount,rounds:3,time:discussionTime,imp:assassinCount,
+    det:document.getElementById('chkDetective').checked?1:0,
+    sher:document.getElementById('chkSheriff').checked?1:0,
+    phan:document.getElementById('chkPhantom').checked?1:0,
+    grd:document.getElementById('chkGuardian').checked?1:0,
+    spy:document.getElementById('chkSpy').checked?1:0,
+    sab:document.getElementById('chkSaboteur').checked?1:0,
+    jest:document.getElementById('chkJester').checked?1:0,
+    cup:document.getElementById('chkCupid').checked?1:0,
+    bnt:document.getElementById('chkBounty').checked?1:0};
   goToNames();
 }
-
-function goToNames() {
-  const inp = document.getElementById('nameInputs');
-  inp.innerHTML = '';
-  
-  const civ = cfg.p - cfg.imp - cfg.det - cfg.sher - cfg.phan - cfg.spy - cfg.jest - cfg.cup - cfg.bnt - cfg.grd - cfg.trk - cfg.sab;
-  const parts = [
-    `${civ} Citizen`, cfg.imp?`${cfg.imp} Assassin`:'',
-    cfg.det?'Detective':'', cfg.sher?'Sheriff':'', cfg.phan?'Phantom':'', cfg.grd?'Guardian':'',
-    cfg.spy?'Spy':'', cfg.sab?'Saboteur':'',
-    cfg.jest?'Jester':'', cfg.cup?'Cupid':'', cfg.bnt?'Bounty':''
-  ].filter(Boolean);
-  
-  document.getElementById('nameDist').innerHTML = '👥 ' + parts.join(' | ');
-  
-  for (let i = 0; i < cfg.p; i++) {
-    inp.innerHTML += `<div class="form-group"><input type="text" id="nm${i}" placeholder="Nama pemain ${i+1}"></div>`;
-  }
-  
+function goToNames(){
+  const inp=document.getElementById('nameInputs');inp.innerHTML='';
+  const civ=cfg.p-cfg.imp-cfg.det-cfg.sher-cfg.phan-cfg.spy-cfg.jest-cfg.cup-cfg.bnt-cfg.grd-cfg.sab;
+  const parts=[`${civ} Citizen`,cfg.imp?`${cfg.imp} Assassin`:'',cfg.det?'Detective':'',cfg.sher?'Sheriff':'',cfg.phan?'Phantom':'',cfg.grd?'Guardian':'',cfg.spy?'Spy':'',cfg.sab?'Saboteur':'',cfg.jest?'Jester':'',cfg.cup?'Cupid':'',cfg.bnt?'Bounty':''].filter(Boolean);
+  document.getElementById('nameDist').innerHTML='👥 '+parts.join(' | ');
+  for(let i=0;i<cfg.p;i++)inp.innerHTML+=`<div class="form-group"><input type="text" id="nm${i}" placeholder="Nama pemain ${i+1}"></div>`;
   show('namesScreen');
 }
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');}
+function shuffle(arr){for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}return arr;}
+function roleName(r){return{civilian:'✅ Citizen',imposter:'🔴 Assassin',jester:'🤡 Jester',phantom:'👻 Phantom',detective:'🔍 Detective',sheriff:'👮 Sheriff',spy:'🕵️ Spy',cupid:'💘 Cupid',bounty:'🎯 Bounty Hunter',guardian:'🛡️ Guardian',saboteur:'💣 Saboteur'}[r]||r;}
+function roleTip(r){return{civilian:'💡 CITIZEN — Jawab jujur dan cari yang mencurigakan!',imposter:'💡 ASSASSIN — Berpura-pura! Jangan ketahuan!',jester:'💡 JESTER — Buat dirimu mencurigakan agar di-vote!',phantom:'💡 PHANTOM (Citizen) — Kamu bisa vote meski sudah mati!',detective:'💡 DETECTIVE (Citizen) — Investigasi 1 pemain, hasilnya terlihat sebelum voting!',sheriff:'💡 SHERIFF (Citizen) — Vote-mu dihitung 2x!',spy:'💡 SPY (Assassin) — Kamu tahu semua Citizen!',cupid:'💡 CUPID — Pilih 2 pemain untuk di-link. Menang jika keduanya survive!',bounty:'💡 BOUNTY HUNTER — Eliminasi target rahasiamu untuk menang!',guardian:'💡 GUARDIAN (Citizen) — Pilih 1 pemain untuk dilindungi. Jika dia di-vote terbanyak, tidak ada yang tereliminasi!',saboteur:'💡 SABOTEUR (Assassin) — Jika kamu tereliminasi, kamu boleh memilih 1 pemain untuk ikut mati!'}[r]||'';}
 
-function show(id) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
-}
-
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-
-function roleName(r) {
-  const map = {
-    civilian:'✅ Citizen', imposter:'🔴 Assassin', jester:'🤡 Jester',
-    phantom:'👻 Phantom', detective:'🔍 Detective', sheriff:'👮 Sheriff',
-    spy:'🕵️ Spy', cupid:'💘 Cupid', bounty:'🎯 Bounty Hunter',
-    guardian:'🛡️ Guardian', saboteur:'💣 Saboteur'
-  };
-  return map[r] || r;
-}
-
-function roleTip(r) {
-  const tips = {
-    civilian:'💡 CITIZEN — Jawab jujur dan cari yang mencurigakan!',
-    imposter:'💡 ASSASSIN — Berpura-pura! Jangan ketahuan!',
-    jester:'💡 JESTER — Buat dirimu mencurigakan agar di-vote!',
-    phantom:'💡 PHANTOM (Citizen) — Kamu bisa vote meski sudah mati!',
-    detective:'💡 DETECTIVE (Citizen) — Investigasi 1 pemain, hasilnya terlihat sebelum voting!',
-    sheriff:'💡 SHERIFF (Citizen) — Vote-mu dihitung 2x!',
-    spy:'💡 SPY (Assassin) — Kamu tahu semua Citizen!',
-    cupid:'💡 CUPID — Pilih 2 pemain untuk di-link. Menang jika keduanya survive!',
-    bounty:'💡 BOUNTY HUNTER — Eliminasi target rahasiamu untuk menang!',
-    guardian:'💡 GUARDIAN (Citizen) — Pilih 1 pemain untuk dilindungi. Jika dia di-vote terbanyak, tidak ada yang tereliminasi!',
-    saboteur:'💡 SABOTEUR (Assassin) — Jika kamu tereliminasi, kamu boleh memilih 1 pemain untuk ikut mati!'
-  };
-  return tips[r] || '';
-}
-
-// Continue with COMPLETE game logic from original file (copy all functions)
-function startRound(prevEliminated=[]) {
-  if (names.length === 0) {
-    names = []; scores = [];
-    for (let i = 0; i < cfg.p; i++) {
-      names.push(document.getElementById(`nm${i}`).value.trim() || `Pemain ${i+1}`);
-      scores.push(0);
-    }
-  }
-  checkedSet = new Set();
-  eliminated = [...prevEliminated];
-  linked = [];
-  detectiveTarget = null; detectiveRevealedRole = null;
-  cupidSelections = [];
-  bountyTarget = null;
-  guardianTarget = null;
-  saboteurDragTarget = null;
-  pendingElimIdx = -1;
-  votes = []; voteIdx = 0; selectedVote = null; curRevealIdx = null;
-
-  let pool = QUESTIONS.filter((_, i) => !usedQ.includes(i));
-  if (!pool.length) { usedQ = []; pool = QUESTIONS; }
-  const qi = Math.floor(Math.random() * pool.length);
-  curQ = pool[qi];
-  usedQ.push(QUESTIONS.indexOf(curQ));
-  qSwap = Math.random() < 0.5;
-
+function startRound(prevEliminated=[]){
+  if(names.length===0){names=[];scores=[];for(let i=0;i<cfg.p;i++){names.push(document.getElementById(`nm${i}`).value.trim()||`Pemain ${i+1}`);scores.push(0);}}
+  checkedSet=new Set();eliminated=[...prevEliminated];linked=[];
+  detectiveTarget=null;detectiveRevealedRole=null;cupidSelections=[];
+  bountyTarget=null;guardianTarget=null;saboteurDragTarget=null;pendingElimIdx=-1;
+  votes=[];voteIdx=0;selectedVote=null;curRevealIdx=null;
+  let pool=QUESTIONS.filter((_,i)=>!usedQ.includes(i));
+  if(!pool.length){usedQ=[];pool=QUESTIONS;}
+  const qi=Math.floor(Math.random()*pool.length);
+  curQ=pool[qi];usedQ.push(QUESTIONS.indexOf(curQ));qSwap=Math.random()<0.5;
   assignRoles();
-  detectiveIdx = roles.indexOf('detective');
-  cupidIdx = roles.indexOf('cupid');
-  bountyIdx = roles.indexOf('bounty');
-  guardianIdx = roles.indexOf('guardian');
-  saboteurIdx = roles.indexOf('saboteur');
-
-  if (bountyIdx !== -1) {
-    const pool2 = names.map((_,i) => i).filter(i => i !== bountyIdx && !eliminated.includes(i));
-    bountyTarget = pool2[Math.floor(Math.random() * pool2.length)];
-  }
-
-  turnOrder = shuffle(names.map((_,i) => i));
-  document.getElementById('revealRound').textContent = `Round ${round}`;
-  renderPlayerList();
-  document.getElementById('roleRevealPanel').style.display = 'none';
-  document.getElementById('startDiscBtn').style.display = 'none';
-  show('revealScreen');
+  detectiveIdx=roles.indexOf('detective');cupidIdx=roles.indexOf('cupid');
+  bountyIdx=roles.indexOf('bounty');guardianIdx=roles.indexOf('guardian');saboteurIdx=roles.indexOf('saboteur');
+  if(bountyIdx!==-1){const p2=names.map((_,i)=>i).filter(i=>i!==bountyIdx&&!eliminated.includes(i));bountyTarget=p2[Math.floor(Math.random()*p2.length)];}
+  turnOrder=shuffle(names.map((_,i)=>i));
+  document.getElementById('revealRound').textContent=`Round ${round}`;
+  document.getElementById('closeRevealBtn').style.display='none';
+  document.getElementById('startDiscBtn').style.display='none';
+  document.getElementById('roleRevealPanel').style.display='none';
+  document.getElementById('playerList').style.display='block';
+  document.getElementById('revealCounter').style.display='block';
+  renderPlayerList();show('revealScreen');
 }
-
-function assignRoles() {
-  const pool = [];
-  const aliveCount = cfg.p - eliminated.length;
-  for (let i = 0; i < cfg.imp; i++) pool.push('imposter');
-  if (cfg.det) pool.push('detective');
-  if (cfg.sher) pool.push('sheriff');
-  if (cfg.phan) pool.push('phantom');
-  if (cfg.spy) pool.push('spy');
-  if (cfg.jest) pool.push('jester');
-  if (cfg.cup) pool.push('cupid');
-  if (cfg.bnt) pool.push('bounty');
-  if (cfg.grd) pool.push('guardian');
-  if (cfg.sab) pool.push('saboteur');
-  while (pool.length < aliveCount) pool.push('civilian');
-  const shuffled = shuffle(pool);
-  roles = new Array(cfg.p).fill(null);
-  let poolIdx = 0;
-  names.forEach((_, i) => {
-    if (!eliminated.includes(i)) roles[i] = shuffled[poolIdx++];
+function assignRoles(){
+  const pool=[];const ac=cfg.p-eliminated.length;
+  for(let i=0;i<cfg.imp;i++)pool.push('imposter');
+  if(cfg.det)pool.push('detective');if(cfg.sher)pool.push('sheriff');if(cfg.phan)pool.push('phantom');
+  if(cfg.spy)pool.push('spy');if(cfg.jest)pool.push('jester');if(cfg.cup)pool.push('cupid');
+  if(cfg.bnt)pool.push('bounty');if(cfg.grd)pool.push('guardian');if(cfg.sab)pool.push('saboteur');
+  while(pool.length<ac)pool.push('civilian');
+  const s=shuffle(pool);roles=new Array(cfg.p).fill(null);let pi=0;
+  names.forEach((_,i)=>{if(!eliminated.includes(i))roles[i]=s[pi++];});
+}
+function renderPlayerList(){
+  const alive=cfg.p-eliminated.length;
+  const checked=Array.from(checkedSet).filter(i=>!eliminated.includes(i)).length;
+  document.getElementById('revealCount').textContent=checked;
+  document.getElementById('revealTotal').textContent=alive;
+  let html='';
+  names.forEach((name,i)=>{
+    const isElim=eliminated.includes(i),isDone=checkedSet.has(i);
+    let badge,cls;
+    if(isElim){badge=`<span class="player-badge badge-elim">☠️ Eliminated</span>`;cls='elim';}
+    else if(isDone){badge=`<span class="player-badge badge-done">✓ Selesai</span>`;cls='done';}
+    else{badge=`<span class="player-badge badge-pending">👁️ Lihat</span>`;cls='';}
+    const click=isElim?'':`onclick="revealRole(${i})"`;
+    html+=`<div class="player-row ${cls}" ${click}><div class="player-name">${name}</div>${badge}</div>`;
   });
+  document.getElementById('playerList').innerHTML=html;
+  document.getElementById('startDiscBtn').style.display=(checked===alive&&alive>0&&checkAbilities())?'block':'none';
 }
-
-function renderPlayerList() {
-  const alive = cfg.p - eliminated.length;
-  const checked = Array.from(checkedSet).filter(i => !eliminated.includes(i)).length;
-  document.getElementById('revealCount').textContent = checked;
-  document.getElementById('revealTotal').textContent = alive;
-
-  let html = '';
-  names.forEach((name, i) => {
-    const isElim = eliminated.includes(i);
-    const isDone = checkedSet.has(i);
-    let badge, cls;
-    if (isElim) { badge = `<span class="player-badge badge-elim">☠️ Eliminated</span>`; cls = 'elim'; }
-    else if (isDone) { badge = `<span class="player-badge badge-done">✓ Selesai</span>`; cls = 'done'; }
-    else { badge = `<span class="player-badge badge-pending">👁️ Lihat</span>`; cls = ''; }
-    const click = isElim ? '' : `onclick="revealRole(${i})"`;
-    html += `<div class="player-row ${cls}" ${click}><div class="player-name">${name}</div>${badge}</div>`;
-  });
-  document.getElementById('playerList').innerHTML = html;
-  if (checked === alive && alive > 0 && checkAbilities()) {
-    document.getElementById('startDiscBtn').style.display = 'block';
-  } else {
-    document.getElementById('startDiscBtn').style.display = 'none';
-  }
-}
-
-function checkAbilities() {
-  if (detectiveIdx !== -1 && !eliminated.includes(detectiveIdx) && checkedSet.has(detectiveIdx) && detectiveTarget === null) return false;
-  if (cupidIdx !== -1 && !eliminated.includes(cupidIdx) && checkedSet.has(cupidIdx) && cupidSelections.length !== 2) return false;
-  if (guardianIdx !== -1 && !eliminated.includes(guardianIdx) && checkedSet.has(guardianIdx) && guardianTarget === null) return false;
+function checkAbilities(){
+  if(detectiveIdx!==-1&&!eliminated.includes(detectiveIdx)&&checkedSet.has(detectiveIdx)&&detectiveTarget===null)return false;
+  if(cupidIdx!==-1&&!eliminated.includes(cupidIdx)&&checkedSet.has(cupidIdx)&&cupidSelections.length!==2)return false;
+  if(guardianIdx!==-1&&!eliminated.includes(guardianIdx)&&checkedSet.has(guardianIdx)&&guardianTarget===null)return false;
   return true;
 }
-
-function revealRole(idx) {
-  curRevealIdx = idx;
-  const role = roles[idx];
-  document.getElementById('revealingName').textContent = names[idx];
-  const badge = document.getElementById('roleBadge');
-  badge.textContent = roleName(role);
-  badge.className = `role-badge role-${role}`;
-  document.getElementById('roleTipBox').textContent = roleTip(role);
-  const ap = document.getElementById('abilityPanel');
-  ap.innerHTML = '';
-  const needsAbility = (role === 'detective' && detectiveTarget === null) || (role === 'cupid' && cupidSelections.length !== 2) || (role === 'guardian' && guardianTarget === null);
-  document.getElementById('closeRevealBtn').disabled = needsAbility;
-  document.getElementById('abilityWarning').style.display = needsAbility ? 'flex' : 'none';
-
-  if (role === 'spy') {
-    const civs = names.filter((_, i) => ['civilian','detective','sheriff','phantom','guardian'].includes(roles[i]));
-    ap.innerHTML = `<div class="ability-box ability-spy"><div class="ability-title">🕵️ Semua Citizen:</div><div style="color:#fff;font-size:1em;margin-top:4px;">${civs.join(', ')}</div></div>`;
+function revealRole(idx){
+  curRevealIdx=idx;const role=roles[idx];
+  document.getElementById('revealingName').textContent=names[idx];
+  const badge=document.getElementById('roleBadge');badge.textContent=roleName(role);badge.className=`role-badge role-${role}`;
+  document.getElementById('roleTipBox').textContent=roleTip(role);
+  const ap=document.getElementById('abilityPanel');ap.innerHTML='';
+  const needsAbility=(role==='detective'&&detectiveTarget===null)||(role==='cupid'&&cupidSelections.length!==2)||(role==='guardian'&&guardianTarget===null);
+  document.getElementById('closeRevealBtn').disabled=needsAbility;
+  document.getElementById('abilityWarning').style.display=needsAbility?'block':'none';
+  if(role==='spy'){const civs=names.filter((_,i)=>['civilian','detective','sheriff','phantom','guardian'].includes(roles[i]));ap.innerHTML=`<div class="ability-box ability-spy"><div class="ability-title">🕵️ Semua Citizen:</div><div style="color:#fff;font-size:0.92em;margin-top:3px;">${civs.join(', ')}</div></div>`;}
+  if(role==='detective'){
+    if(detectiveTarget!==null)ap.innerHTML=`<div class="ability-box ability-detective"><div class="ability-title">🔍 Hasil Investigasi</div><div class="result-box result-detective"><div class="result-value">${names[detectiveTarget]} = ${roleName(detectiveRevealedRole)}</div></div></div>`;
+    else{const btns=names.map((n,i)=>(i===idx||eliminated.includes(i))?'':`<div class="target-btn" onclick="pickDetective(${idx},${i},this)">${n}</div>`).join('');ap.innerHTML=`<div class="ability-box ability-detective"><div class="ability-title">🔍 Pilih 1 pemain untuk diinvestigasi:</div><div class="target-grid">${btns}</div></div>`;}
   }
-
-  if (role === 'detective') {
-    if (detectiveTarget !== null) {
-      ap.innerHTML = `<div class="ability-box ability-detective"><div class="ability-title">🔍 Hasil Investigasi</div><div class="result-box result-detective"><div class="result-value">${names[detectiveTarget]} = ${roleName(detectiveRevealedRole)}</div></div></div>`;
-    } else {
-      const btns = names.map((n, i) => (i === idx || eliminated.includes(i)) ? '' : `<div class="target-btn" onclick="pickDetective(${idx},${i},this)">${n}</div>`).join('');
-      ap.innerHTML = `<div class="ability-box ability-detective"><div class="ability-title">🔍 Pilih 1 pemain untuk diinvestigasi:</div><div class="target-grid">${btns}</div></div>`;
-    }
+  if(role==='cupid'){
+    if(cupidSelections.length===2)ap.innerHTML=`<div class="ability-box ability-cupid"><div class="ability-title">💘 Lovers Ter-link</div><div class="result-box result-cupid"><div class="result-value">${names[cupidSelections[0]]} & ${names[cupidSelections[1]]}</div></div></div>`;
+    else{const btns=names.map((n,i)=>(i===idx||eliminated.includes(i))?'':`<div class="target-btn ${cupidSelections.includes(i)?'selected':''}" onclick="pickCupid(${idx},${i},this)">${n}</div>`).join('');ap.innerHTML=`<div class="ability-box ability-cupid"><div class="ability-title">💘 Pilih 2 pemain untuk di-link (${cupidSelections.length}/2):</div><div class="target-grid" id="cupidTargetGrid">${btns}</div></div>`;}
   }
-
-  if (role === 'cupid') {
-    if (cupidSelections.length === 2) {
-      ap.innerHTML = `<div class="ability-box ability-cupid"><div class="ability-title">💘 Lovers Ter-link</div><div class="result-box result-cupid"><div class="result-value">${names[cupidSelections[0]]} & ${names[cupidSelections[1]]}</div><div style="color:#888;font-size:0.8em;margin-top:4px;">Jika 1 mati, keduanya mati</div></div></div>`;
-    } else {
-      const btns = names.map((n, i) => (i === idx || eliminated.includes(i)) ? '' : `<div class="target-btn ${cupidSelections.includes(i)?'selected':''}" onclick="pickCupid(${idx},${i},this)">${n}</div>`).join('');
-      ap.innerHTML = `<div class="ability-box ability-cupid"><div class="ability-title">💘 Pilih 2 pemain untuk di-link (${cupidSelections.length}/2):</div><div class="target-grid" id="cupidTargetGrid">${btns}</div></div>`;
-    }
+  if(role==='bounty')ap.innerHTML=`<div class="ability-box ability-bounty"><div class="ability-title">🎯 Target Anda:</div><div class="result-box result-bounty"><div class="result-value">${names[bountyTarget]}</div></div></div>`;
+  if(role==='guardian'){
+    if(guardianTarget!==null)ap.innerHTML=`<div class="ability-box ability-guardian"><div class="ability-title">🛡️ Pemain yang Dilindungi</div><div class="result-box result-guardian"><div class="result-value">${names[guardianTarget]}</div></div></div>`;
+    else{const btns=names.map((n,i)=>(i===idx||eliminated.includes(i))?'':`<div class="target-btn" onclick="pickGuardian(${idx},${i},this)">${n}</div>`).join('');ap.innerHTML=`<div class="ability-box ability-guardian"><div class="ability-title">🛡️ Pilih 1 pemain untuk dilindungi:</div><div class="target-grid">${btns}</div></div>`;}
   }
-
-  if (role === 'bounty') {
-    ap.innerHTML = `<div class="ability-box ability-bounty"><div class="ability-title">🎯 Target Anda:</div><div class="result-box result-bounty"><div class="result-value">${names[bountyTarget]}</div><div style="color:#888;font-size:0.8em;margin-top:4px;">Eliminasi target ini untuk menang!</div></div></div>`;
-  }
-
-  if (role === 'guardian') {
-    if (guardianTarget !== null) {
-      ap.innerHTML = `<div class="ability-box ability-guardian"><div class="ability-title">🛡️ Pemain yang Dilindungi</div><div class="result-box result-guardian"><div class="result-value">${names[guardianTarget]}</div><div style="color:#888;font-size:0.8em;margin-top:4px;">Jika dia di-vote terbanyak, tidak ada yang tereliminasi</div></div></div>`;
-    } else {
-      const btns = names.map((n, i) => (i === idx || eliminated.includes(i)) ? '' : `<div class="target-btn" onclick="pickGuardian(${idx},${i},this)">${n}</div>`).join('');
-      ap.innerHTML = `<div class="ability-box ability-guardian"><div class="ability-title">🛡️ Pilih 1 pemain untuk dilindungi:</div><div class="target-grid">${btns}</div></div>`;
-    }
-  }
-
-  if (role === 'saboteur') {
-    ap.innerHTML = `<div class="ability-box ability-saboteur"><div class="ability-title">💣 Ability: Death Drag</div><div style="color:#ccc;font-size:0.9em;margin-top:4px;">Jika kamu tereliminasi, kamu bisa memilih 1 pemain untuk ikut tereliminasi bersamamu.</div></div>`;
-  }
-
+  if(role==='saboteur')ap.innerHTML=`<div class="ability-box ability-saboteur"><div class="ability-title">💣 Ability: Death Drag</div><div style="color:#ccc;font-size:0.86em;margin-top:3px;">Jika kamu tereliminasi, kamu bisa memilih 1 pemain untuk ikut tereliminasi bersamamu.</div></div>`;
   let q;
-  if (role === 'jester') { q = curQ.j; }
-  else {
-    const isPos = ['civilian','detective','sheriff','phantom','guardian'].includes(role);
-    const isNeg = ['imposter','spy','saboteur'].includes(role);
-    let ePos = isPos, eNeg = isNeg;
-    q = qSwap ? (ePos ? curQ.n : (eNeg ? curQ.p : curQ.p)) : (ePos ? curQ.p : (eNeg ? curQ.n : curQ.p));
-  }
-  document.getElementById('revealQuestion').textContent = q;
+  if(role==='jester')q=curQ.j;
+  else{const isPos=['civilian','detective','sheriff','phantom','guardian'].includes(role);const isNeg=['imposter','spy','saboteur'].includes(role);q=qSwap?(isPos?curQ.n:(isNeg?curQ.p:curQ.p)):(isPos?curQ.p:(isNeg?curQ.n:curQ.p));}
+  document.getElementById('revealQuestion').textContent=q;
   checkedSet.add(idx);
-  document.getElementById('playerList').style.display = 'none';
-  document.getElementById('roleRevealPanel').style.display = 'block';
-  document.getElementById('revealCount').parentElement.style.display = 'none';
+  document.getElementById('playerList').style.display='none';
+  document.getElementById('roleRevealPanel').style.display='block';
+  document.getElementById('closeRevealBtn').style.display='block';
+  document.getElementById('startDiscBtn').style.display='none';
+  document.getElementById('revealCounter').style.display='none';
 }
-
-function pickDetective(detIdx, targetIdx, el) {
-  if (detectiveTarget !== null) return;
-  detectiveTarget = targetIdx; detectiveRevealedRole = roles[targetIdx];
-  document.getElementById('abilityPanel').innerHTML = `<div class="ability-box ability-detective"><div class="ability-title">🔍 Hasil Investigasi</div><div class="result-box result-detective"><div class="result-value">${names[targetIdx]} = ${roleName(detectiveRevealedRole)}</div></div></div>`;
-  document.getElementById('closeRevealBtn').disabled = false;
-  document.getElementById('abilityWarning').style.display = 'none';
+function pickDetective(di,ti,el){if(detectiveTarget!==null)return;detectiveTarget=ti;detectiveRevealedRole=roles[ti];document.getElementById('abilityPanel').innerHTML=`<div class="ability-box ability-detective"><div class="ability-title">🔍 Hasil Investigasi</div><div class="result-box result-detective"><div class="result-value">${names[ti]} = ${roleName(detectiveRevealedRole)}</div></div></div>`;document.getElementById('closeRevealBtn').disabled=false;document.getElementById('abilityWarning').style.display='none';}
+function pickCupid(ci,ti,el){
+  if(cupidSelections.includes(ti)){cupidSelections=cupidSelections.filter(i=>i!==ti);linked=linked.filter(i=>i!==ti);el.classList.remove('selected');}
+  else if(cupidSelections.length<2){cupidSelections.push(ti);linked.push(ti);el.classList.add('selected');}
+  const grid=document.getElementById('cupidTargetGrid');if(grid&&grid.previousElementSibling)grid.previousElementSibling.textContent=`💘 Pilih 2 pemain untuk di-link (${cupidSelections.length}/2):`;
+  if(cupidSelections.length===2){document.getElementById('abilityPanel').innerHTML=`<div class="ability-box ability-cupid"><div class="ability-title">💘 Lovers Ter-link</div><div class="result-box result-cupid"><div class="result-value">${names[cupidSelections[0]]} & ${names[cupidSelections[1]]}</div></div></div>`;document.getElementById('closeRevealBtn').disabled=false;document.getElementById('abilityWarning').style.display='none';}
 }
-
-function pickCupid(cupIdx, targetIdx, el) {
-  if (cupidSelections.includes(targetIdx)) {
-    cupidSelections = cupidSelections.filter(i => i !== targetIdx);
-    linked = linked.filter(i => i !== targetIdx);
-    el.classList.remove('selected');
-  } else if (cupidSelections.length < 2) {
-    cupidSelections.push(targetIdx); linked.push(targetIdx); el.classList.add('selected');
-  }
-  const grid = document.getElementById('cupidTargetGrid');
-  if (grid && grid.previousElementSibling) grid.previousElementSibling.textContent = `💘 Pilih 2 pemain untuk di-link (${cupidSelections.length}/2):`;
-  if (cupidSelections.length === 2) {
-    document.getElementById('abilityPanel').innerHTML = `<div class="ability-box ability-cupid"><div class="ability-title">💘 Lovers Ter-link</div><div class="result-box result-cupid"><div class="result-value">${names[cupidSelections[0]]} & ${names[cupidSelections[1]]}</div><div style="color:#888;font-size:0.8em;margin-top:4px;">Jika 1 mati, keduanya mati</div></div></div>`;
-    document.getElementById('closeRevealBtn').disabled = false;
-    document.getElementById('abilityWarning').style.display = 'none';
-  }
+function pickGuardian(gi,ti,el){if(guardianTarget!==null)return;guardianTarget=ti;document.getElementById('abilityPanel').innerHTML=`<div class="ability-box ability-guardian"><div class="ability-title">🛡️ Pemain yang Dilindungi</div><div class="result-box result-guardian"><div class="result-value">${names[ti]}</div></div></div>`;document.getElementById('closeRevealBtn').disabled=false;document.getElementById('abilityWarning').style.display='none';}
+function closeReveal(){document.getElementById('roleRevealPanel').style.display='none';document.getElementById('closeRevealBtn').style.display='none';document.getElementById('playerList').style.display='block';document.getElementById('revealCounter').style.display='block';renderPlayerList();curRevealIdx=null;}
+function startDiscussion(){
+  document.getElementById('discRound').textContent=`Round ${round}`;
+  document.getElementById('discQuestion').textContent=curQ.p;
+  let html='';turnOrder.forEach((pi,pos)=>{if(!eliminated.includes(pi))html+=`<div class="turn-item"><span><strong>${pos+1}.</strong> ${names[pi]}</span><span style="color:#888;">Giliran ${pos+1}</span></div>`;});
+  document.getElementById('turnList').innerHTML=html;
+  show('discScreen');if(timerInterval)clearInterval(timerInterval);startTimer(cfg.time*60);
 }
-
-function pickGuardian(grdIdx, targetIdx, el) {
-  if (guardianTarget !== null) return;
-  guardianTarget = targetIdx;
-  document.getElementById('abilityPanel').innerHTML = `<div class="ability-box ability-guardian"><div class="ability-title">🛡️ Pemain yang Dilindungi</div><div class="result-box result-guardian"><div class="result-value">${names[targetIdx]}</div><div style="color:#888;font-size:0.8em;margin-top:4px;">Jika dia di-vote terbanyak, tidak ada yang tereliminasi</div></div></div>`;
-  document.getElementById('closeRevealBtn').disabled = false;
-  document.getElementById('abilityWarning').style.display = 'none';
+function startTimer(secs){
+  let left=secs;
+  function update(){const m=Math.floor(left/60),s=left%60;const el=document.getElementById('timerDisplay');if(el)el.textContent=`${m}:${s.toString().padStart(2,'0')}`;if(left<=0){clearInterval(timerInterval);if(el)el.textContent='⏰ Waktu Habis!';}left--;}
+  update();timerInterval=setInterval(update,1000);
 }
-
-function closeReveal() {
-  document.getElementById('roleRevealPanel').style.display = 'none';
-  document.getElementById('playerList').style.display = 'block';
-  document.getElementById('revealCount').parentElement.style.display = 'block';
-  renderPlayerList(); curRevealIdx = null;
+function goToVoting(){
+  if(timerInterval)clearInterval(timerInterval);
+  document.getElementById('voteRound').textContent=`Round ${round} - Voting`;
+  if(guardianTarget!==null){document.getElementById('guardianInfoText').textContent=`${names[guardianTarget]} (dilindungi ronde ini)`;document.getElementById('guardianInfo').style.display='block';}
+  else document.getElementById('guardianInfo').style.display='none';
+  voteOrder=shuffle(names.map((_,i)=>i).filter(i=>!eliminated.includes(i)));
+  names.forEach((_,i)=>{if(eliminated.includes(i)&&roles[i]==='phantom')voteOrder.push(i);});
+  votes=[];voteIdx=0;selectedVote=null;
+  document.getElementById('seeResultBtn').style.display='none';document.getElementById('confirmVoteBtn').style.display='none';
+  showNextVoter();show('voteScreen');
 }
-
-function startDiscussion() {
-  document.getElementById('discRound').textContent = `Round ${round}`;
-  document.getElementById('discQuestion').textContent = curQ.p;
-  let html = '';
-  turnOrder.forEach((pi, pos) => {
-    if (!eliminated.includes(pi)) html += `<div class="turn-item"><span><strong>${pos+1}.</strong> ${names[pi]}</span><span style="color:#888;">Giliran ${pos+1}</span></div>`;
-  });
-  document.getElementById('turnList').innerHTML = html;
-  show('discScreen');
-  if (timerInterval) clearInterval(timerInterval);
-  startTimer(cfg.time * 60);
+function showNextVoter(){
+  if(voteIdx>=voteOrder.length){document.getElementById('voterPanel').style.display='none';document.getElementById('seeResultBtn').style.display='block';document.getElementById('confirmVoteBtn').style.display='none';return;}
+  document.getElementById('voterPanel').style.display='block';
+  const vi=voteOrder[voteIdx];const isP=roles[vi]==='phantom'&&eliminated.includes(vi);
+  document.getElementById('voterInfo').textContent=`Giliran ${names[vi]} (${voteIdx+1}/${voteOrder.length})${isP?' 👻 Phantom':''}`;
+  selectedVote=null;document.getElementById('confirmVoteBtn').style.display='none';
+  let btns='';names.forEach((n,i)=>{if(!eliminated.includes(i)&&i!==vi)btns+=`<div class="vote-btn" onclick="selectVoteTarget(${i},this)">${n}</div>`;});
+  document.getElementById('voteButtons').innerHTML=btns;
 }
-
-function startTimer(secs) {
-  let left = secs;
-  function update() {
-    const m = Math.floor(left / 60), s = left % 60;
-    const el = document.getElementById('timerDisplay');
-    if (el) el.textContent = `${m}:${s.toString().padStart(2,'0')}`;
-    if (left <= 0) { clearInterval(timerInterval); if (el) el.textContent = '⏰ Waktu Habis!'; }
-    left--;
-  }
-  update(); timerInterval = setInterval(update, 1000);
-}
-
-function goToVoting() {
-  if (timerInterval) clearInterval(timerInterval);
-  document.getElementById('voteRound').textContent = `Round ${round} - Voting`;
-  if (guardianTarget !== null) {
-    document.getElementById('guardianInfoText').textContent = `${names[guardianTarget]} (dilindungi ronde ini)`;
-    document.getElementById('guardianInfo').style.display = 'block';
-  } else { document.getElementById('guardianInfo').style.display = 'none'; }
-  voteOrder = shuffle(names.map((_,i) => i).filter(i => !eliminated.includes(i)));
-  names.forEach((_, i) => { if (eliminated.includes(i) && roles[i] === 'phantom') voteOrder.push(i); });
-  votes = []; voteIdx = 0; selectedVote = null;
-  document.getElementById('seeResultBtn').style.display = 'none';
-  showNextVoter(); show('voteScreen');
-}
-
-function showNextVoter() {
-  if (voteIdx >= voteOrder.length) {
-    document.getElementById('voterPanel').style.display = 'none';
-    document.getElementById('seeResultBtn').style.display = 'block';
-    return;
-  }
-  document.getElementById('voterPanel').style.display = 'block';
-  const vi = voteOrder[voteIdx];
-  const isPhantom = roles[vi] === 'phantom' && eliminated.includes(vi);
-  document.getElementById('voterInfo').textContent = `Giliran ${names[vi]} (${voteIdx+1}/${voteOrder.length})${isPhantom ? ' 👻 Phantom' : ''}`;
-  selectedVote = null; document.getElementById('confirmVoteBtn').style.display = 'none';
-  let btns = '';
-  names.forEach((n, i) => { if (!eliminated.includes(i) && i !== vi) btns += `<div class="vote-btn" onclick="selectVoteTarget(${i},this)">${n}</div>`; });
-  document.getElementById('voteButtons').innerHTML = btns;
-}
-
-function selectVoteTarget(idx, el) {
-  document.querySelectorAll('.vote-btn').forEach(b => b.classList.remove('selected'));
-  el.classList.add('selected'); selectedVote = idx;
-  document.getElementById('confirmVoteBtn').style.display = 'block';
-}
-
-function submitVote() {
-  if (selectedVote === null) return;
-  const vi = voteOrder[voteIdx];
-  const w = roles[vi] === 'sheriff' ? 2 : 1;
-  votes.push({ voter: vi, target: selectedVote, weight: w });
-  voteIdx++; showNextVoter();
-}
-
-function showResults() {
-  if (timerInterval) clearInterval(timerInterval);
-  const tally = {};
-  votes.forEach(v => { tally[v.target] = (tally[v.target] || 0) + v.weight; });
-  let maxV = 0, elimIdx = -1;
-  Object.entries(tally).forEach(([idx, v]) => { if (v > maxV) { maxV = v; elimIdx = parseInt(idx); } });
-  
-  if (elimIdx === -1) {
-    document.getElementById('eliminatedInfo').innerHTML = 'Tidak ada yang tereliminasi!';
-    document.getElementById('resultRound').textContent = `Round ${round} - Hasil`;
-    document.getElementById('roundWinner').innerHTML = '';
-    finishRound([...eliminated]); return;
-  }
-
-  if (guardianTarget !== null && elimIdx === guardianTarget) {
-    document.getElementById('eliminatedInfo').innerHTML = `🛡️ <strong>${names[elimIdx]}</strong> dilindungi Guardian! Tidak ada yang tereliminasi.`;
-    document.getElementById('resultRound').textContent = `Round ${round} - Hasil`;
-    document.getElementById('roundWinner').innerHTML = `<div class="reveal-result"><div class="big win-guardian">🛡️ GUARDIAN BERHASIL!</div></div>`;
-    if (guardianIdx !== -1) scores[guardianIdx] += 2;
-    finishRound([...eliminated]); return;
-  }
-
-  if (roles[elimIdx] === 'saboteur') {
-    pendingElimIdx = elimIdx; eliminated.push(elimIdx);
-    let btns = ''; names.forEach((n, i) => { if (!eliminated.includes(i)) btns += `<div class="vote-btn" onclick="selectSaboteurTarget(${i},this)">${n}</div>`; });
-    document.getElementById('saboteurTargets').innerHTML = btns;
-    document.getElementById('saboteurConfirmBtn').style.display = 'none';
-    show('saboteurScreen'); return;
-  }
+function selectVoteTarget(idx,el){document.querySelectorAll('.vote-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');selectedVote=idx;document.getElementById('confirmVoteBtn').style.display='block';}
+function submitVote(){if(selectedVote===null)return;const vi=voteOrder[voteIdx];const w=roles[vi]==='sheriff'?2:1;votes.push({voter:vi,target:selectedVote,weight:w});voteIdx++;showNextVoter();}
+function showResults(){
+  if(timerInterval)clearInterval(timerInterval);
+  const tally={};votes.forEach(v=>{tally[v.target]=(tally[v.target]||0)+v.weight;});
+  let maxV=0,elimIdx=-1;Object.entries(tally).forEach(([idx,v])=>{if(v>maxV){maxV=v;elimIdx=parseInt(idx);}});
+  if(elimIdx===-1){document.getElementById('eliminatedInfo').innerHTML='Tidak ada yang tereliminasi!';document.getElementById('resultRound').textContent=`Round ${round} - Hasil`;document.getElementById('roundWinner').innerHTML='';finishRound([...eliminated]);return;}
+  if(guardianTarget!==null&&elimIdx===guardianTarget){document.getElementById('eliminatedInfo').innerHTML=`🛡️ <strong>${names[elimIdx]}</strong> dilindungi Guardian! Tidak ada yang tereliminasi.`;document.getElementById('resultRound').textContent=`Round ${round} - Hasil`;document.getElementById('roundWinner').innerHTML=`<div class="big win-guardian">🛡️ GUARDIAN BERHASIL!</div>`;if(guardianIdx!==-1)scores[guardianIdx]+=2;finishRound([...eliminated]);return;}
+  if(roles[elimIdx]==='saboteur'){pendingElimIdx=elimIdx;eliminated.push(elimIdx);let btns='';names.forEach((n,i)=>{if(!eliminated.includes(i))btns+=`<div class="vote-btn" onclick="selectSaboteurTarget(${i},this)">${n}</div>`;});document.getElementById('saboteurTargets').innerHTML=btns;document.getElementById('saboteurConfirmBtn').style.display='none';show('saboteurScreen');return;}
   processElimination(elimIdx);
 }
-
-function selectSaboteurTarget(idx, el) {
-  document.querySelectorAll('#saboteurTargets .vote-btn').forEach(b => b.classList.remove('selected'));
-  el.classList.add('selected'); saboteurDragTarget = idx;
-  document.getElementById('saboteurConfirmBtn').style.display = 'block';
-}
-
-function confirmSaboteur() {
-  if (saboteurDragTarget !== null && !eliminated.includes(saboteurDragTarget)) eliminated.push(saboteurDragTarget);
-  processElimination(pendingElimIdx);
-}
-
-function processElimination(elimIdx) {
-  if (!eliminated.includes(elimIdx)) eliminated.push(elimIdx);
-  if (linked.includes(elimIdx)) { linked.forEach(li => { if (li !== elimIdx && !eliminated.includes(li)) eliminated.push(li); }); }
-  const elimRole = roles[elimIdx];
-  let winnerHTML = '';
-  const negAlive = roles.some((r, i) => ['imposter','spy','saboteur'].includes(r) && !eliminated.includes(i));
-  const neuAlive = roles.some((r, i) => ['jester','cupid','bounty'].includes(r) && !eliminated.includes(i));
-
-  if (elimRole === 'jester') { winnerHTML = `<div class="big win-jester">🤡 JESTER MENANG!</div>`; scores[elimIdx] += 3; }
-  else if (elimIdx === bountyTarget && bountyIdx !== -1) { winnerHTML = `<div class="big win-bounty">🎯 BOUNTY HUNTER MENANG!</div>`; scores[bountyIdx] += 3; }
-  else if (['imposter','spy','saboteur'].includes(elimRole)) {
-    roles.forEach((r,i) => { if (['civilian','detective','sheriff','phantom','guardian'].includes(r)) scores[i] += 1; });
-    winnerHTML = negAlive ? `<div class="big win-positive">✅ Assassin tereliminasi! Masih ada ancaman lain.</div>` : `<div class="big win-positive">✅ CITIZEN MENANG!</div>`;
-  } else {
-    winnerHTML = `<div class="big win-negative">🔴 ASSASSIN MENANG!</div>`;
-    roles.forEach((r,i) => { if (['imposter','spy','saboteur'].includes(r)) scores[i] += 2; });
-  }
-
-  if (linked.length === 2 && !linked.some(li => eliminated.includes(li)) && cupidIdx !== -1) {
-    winnerHTML += `<div class="big win-cupid" style="margin-top:8px;">💘 CUPID MENANG! Lovers survive!</div>`;
-    scores[cupidIdx] += 3;
-  }
-
-  let elimInfo = `☠️ Tereliminasi: <strong>${names[elimIdx]}</strong> (${roleName(elimRole)})`;
-  if (saboteurDragTarget !== null && roles[pendingElimIdx] === 'saboteur') {
-    elimInfo += `<br>💣 Juga tereliminasi (Saboteur drag): <strong>${names[saboteurDragTarget]}</strong>`;
-  }
-  if (linked.includes(elimIdx) && linked.length === 2) {
-    const other = linked.find(li => li !== elimIdx);
-    if (other !== undefined && eliminated.includes(other)) elimInfo += `<br>💘 Juga tereliminasi (linked): <strong>${names[other]}</strong>`;
-  }
-
-  document.getElementById('eliminatedInfo').innerHTML = elimInfo;
-  document.getElementById('resultRound').textContent = `Round ${round} - Hasil`;
-  document.getElementById('roundWinner').innerHTML = `<div class="reveal-result">${winnerHTML}</div>`;
+function selectSaboteurTarget(idx,el){document.querySelectorAll('#saboteurTargets .vote-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');saboteurDragTarget=idx;document.getElementById('saboteurConfirmBtn').style.display='block';}
+function confirmSaboteur(){if(saboteurDragTarget!==null&&!eliminated.includes(saboteurDragTarget))eliminated.push(saboteurDragTarget);processElimination(pendingElimIdx);}
+function processElimination(elimIdx){
+  if(!eliminated.includes(elimIdx))eliminated.push(elimIdx);
+  if(linked.includes(elimIdx))linked.forEach(li=>{if(li!==elimIdx&&!eliminated.includes(li))eliminated.push(li);});
+  const elimRole=roles[elimIdx];let winnerHTML='';
+  const negAlive=roles.some((r,i)=>['imposter','spy','saboteur'].includes(r)&&!eliminated.includes(i));
+  if(elimRole==='jester'){winnerHTML=`<div class="big win-jester">🤡 JESTER MENANG!</div>`;scores[elimIdx]+=3;}
+  else if(elimIdx===bountyTarget&&bountyIdx!==-1){winnerHTML=`<div class="big win-bounty">🎯 BOUNTY HUNTER MENANG!</div>`;scores[bountyIdx]+=3;}
+  else if(['imposter','spy','saboteur'].includes(elimRole)){roles.forEach((r,i)=>{if(['civilian','detective','sheriff','phantom','guardian'].includes(r))scores[i]+=1;});winnerHTML=negAlive?`<div class="big win-positive">✅ Assassin tereliminasi! Masih ada ancaman lain.</div>`:`<div class="big win-positive">✅ CITIZEN MENANG!</div>`;}
+  else{winnerHTML=`<div class="big win-negative">🔴 ASSASSIN MENANG!</div>`;roles.forEach((r,i)=>{if(['imposter','spy','saboteur'].includes(r))scores[i]+=2;});}
+  if(linked.length===2&&!linked.some(li=>eliminated.includes(li))&&cupidIdx!==-1){winnerHTML+=`<div class="big win-cupid" style="margin-top:5px;">💘 CUPID MENANG! Lovers survive!</div>`;scores[cupidIdx]+=3;}
+  let elimInfo=`☠️ Tereliminasi: <strong>${names[elimIdx]}</strong> (${roleName(elimRole)})`;
+  if(saboteurDragTarget!==null&&roles[pendingElimIdx]==='saboteur')elimInfo+=`<br>💣 Juga tereliminasi (Saboteur drag): <strong>${names[saboteurDragTarget]}</strong>`;
+  if(linked.includes(elimIdx)&&linked.length===2){const other=linked.find(li=>li!==elimIdx);if(other!==undefined&&eliminated.includes(other))elimInfo+=`<br>💘 Juga tereliminasi (linked): <strong>${names[other]}</strong>`;}
+  document.getElementById('eliminatedInfo').innerHTML=elimInfo;
+  document.getElementById('resultRound').textContent=`Round ${round} - Hasil`;
+  document.getElementById('roundWinner').innerHTML=winnerHTML;
   finishRound([...eliminated]);
 }
-
-function finishRound(currentEliminated) {
-  roundHistory.push({ round, q: curQ, hasJester: cfg.jest > 0, roles: [...roles], eliminated: currentEliminated });
-  if (round < cfg.rounds) {
-    document.getElementById('nextRoundBtn').style.display = 'block';
-    document.getElementById('finalBtn').style.display = 'none';
-  } else {
-    document.getElementById('nextRoundBtn').style.display = 'none';
-    document.getElementById('finalBtn').style.display = 'block';
-  }
+function finishRound(ce){
+  roundHistory.push({round,q:curQ,hasJester:cfg.jest>0,roles:[...roles],eliminated:ce});
+  document.getElementById('nextRoundBtn').style.display=round<cfg.rounds?'block':'none';
+  document.getElementById('finalBtn').style.display=round>=cfg.rounds?'block':'none';
   show('resultScreen');
 }
-
-function nextRound() { const prev = [...eliminated]; round++; startRound(prev); }
-
-function showFinal() {
-  const sorted = names.map((n,i) => ({ n, s: scores[i] })).sort((a,b) => b.s - a.s);
-  const fw = document.getElementById('finalWinner');
-  fw.innerHTML = `🏆 ${sorted[0].n} Menang! (${sorted[0].s} pts)`;
-  fw.style.cssText = 'text-align:center;font-size:1.3em;font-weight:800;padding:16px;border-radius:14px;margin-bottom:16px;color:#00ff88;background:rgba(0,255,136,0.1);border:2px solid #00ff88;';
-  let html = '';
-  sorted.forEach((p, i) => {
-    const medal = i===0?'🥇':i===1?'🥈':i===2?'🥉':'⭐';
-    html += `<div class="score-row ${i===0?'top':''}"><span>${medal} ${p.n}</span><span style="color:#00ff88;font-weight:700;">${p.s} pts</span></div>`;
+function nextRound(){const prev=[...eliminated];round++;startRound(prev);}
+function showFinal(){
+  const sorted=names.map((n,i)=>({n,s:scores[i]})).sort((a,b)=>b.s-a.s);
+  document.getElementById('finalWinner').innerHTML=`🏆 ${sorted[0].n} Menang! (${sorted[0].s} pts)`;
+  let html='';sorted.forEach((p,i)=>{const medal=i===0?'🥇':i===1?'🥈':i===2?'🥉':'⭐';html+=`<div class="score-row ${i===0?'top':''}"><span>${medal} ${p.n}</span><span style="color:#00ff88;font-weight:700;">${p.s} pts</span></div>`;});
+  document.getElementById('finalScores').innerHTML=html;
+  let histHTML='';
+  roundHistory.forEach(h=>{
+    let rolesHTML='';names.forEach((n,i)=>{if(h.roles[i]===null)return;const isElim=h.eliminated.includes(i);rolesHTML+=`<div class="role-reveal-row"><span style="${isElim?'text-decoration:line-through;color:#555;':''}">${n}</span><span class="role-badge" style="display:inline;font-size:0.7em;padding:2px 7px;">${roleName(h.roles[i])}</span></div>`;});
+    histHTML+=`<div style="background:rgba(10,10,20,0.5);border:2px solid rgba(0,255,136,0.15);border-radius:13px;padding:10px;margin-bottom:8px;"><div style="color:#a020f0;font-weight:700;font-size:0.9em;margin-bottom:7px;">📋 Round ${h.round}</div><div style="margin-bottom:7px;">${rolesHTML}</div><div style="font-size:0.76em;color:#888;margin-bottom:2px;">Pertanyaan Positif:</div><div style="font-size:0.86em;margin-bottom:5px;">${h.q.p}</div><div style="font-size:0.76em;color:#888;margin-bottom:2px;">Pertanyaan Negatif:</div><div style="font-size:0.86em;${h.hasJester?'margin-bottom:5px;':''}">${h.q.n}</div>${h.hasJester?`<div style="font-size:0.76em;color:#888;margin-bottom:2px;">Pertanyaan Jester:</div><div style="font-size:0.86em;">${h.q.j}</div>`:''}</div>`;
   });
-  document.getElementById('finalScores').innerHTML = html;
-
-  let histHTML = '';
-  roundHistory.forEach(h => {
-    let rolesHTML = '';
-    names.forEach((n, i) => {
-      if (h.roles[i] === null) return;
-      const isElim = h.eliminated.includes(i);
-      rolesHTML += `<div class="role-reveal-row"><span style="${isElim?'text-decoration:line-through;color:#555;':''}">${n}</span><span class="role-badge" style="display:inline;font-size:0.78em;padding:3px 8px;">${roleName(h.roles[i])}</span></div>`;
-    });
-    histHTML += `<div class="card" style="background:rgba(10,10,20,0.5);margin-bottom:12px;">
-      <h2 style="font-size:1em;margin-bottom:10px;color:#a020f0;">📋 Round ${h.round}</h2>
-      <div style="margin-bottom:10px;">${rolesHTML}</div>
-      <div style="font-size:0.82em;color:#888;margin-bottom:2px;">Pertanyaan Positif:</div>
-      <div style="font-size:0.9em;margin-bottom:6px;">${h.q.p}</div>
-      <div style="font-size:0.82em;color:#888;margin-bottom:2px;">Pertanyaan Negatif:</div>
-      <div style="font-size:0.9em;${h.hasJester?'margin-bottom:6px;':''}">${h.q.n}</div>
-      ${h.hasJester?`<div style="font-size:0.82em;color:#888;margin-bottom:2px;">Pertanyaan Jester:</div><div style="font-size:0.9em;">${h.q.j}</div>`:''}
-    </div>`;
-  });
-  document.getElementById('roundHistory').innerHTML = histHTML;
-  show('finalScreen');
+  document.getElementById('roundHistory').innerHTML=histHTML;show('finalScreen');
 }
-
-function backToDiscussion() { show('discScreen'); startTimer(cfg.time * 60); }
-
-function resetGame() {
-  if (timerInterval) clearInterval(timerInterval);
-  names=[]; scores=[]; roles=[]; round=1; usedQ=[]; roundHistory=[];
-  checkedSet=new Set(); eliminated=[];
-  detectiveIdx=-1; detectiveTarget=null; cupidIdx=-1; cupidSelections=[]; linked=[];
-  bountyIdx=-1; bountyTarget=null;
-  guardianIdx=-1; guardianTarget=null;
-  saboteurIdx=-1; saboteurDragTarget=null; pendingElimIdx=-1;
+function backToDiscussion(){show('discScreen');startTimer(cfg.time*60);}
+function resetGame(){
+  if(timerInterval)clearInterval(timerInterval);
+  names=[];scores=[];roles=[];round=1;usedQ=[];roundHistory=[];
+  checkedSet=new Set();eliminated=[];detectiveIdx=-1;detectiveTarget=null;
+  cupidIdx=-1;cupidSelections=[];linked=[];bountyIdx=-1;bountyTarget=null;
+  guardianIdx=-1;guardianTarget=null;saboteurIdx=-1;saboteurDragTarget=null;pendingElimIdx=-1;
   show('setupScreen');
 }
 </script>
