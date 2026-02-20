@@ -247,6 +247,22 @@ input:focus { outline:none; border-color:#00ff88; }
 
 .saboteur-drag{background:rgba(255,69,0,0.08);border:2px solid rgba(255,69,0,0.4);border-radius:12px;padding:11px;margin:5px 0}
 .saboteur-drag h3{color:#FF4500;font-size:0.92em;margin-bottom:7px}
+
+/* Role image illustration */
+.role-illustration {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 6px auto 4px;
+  width: clamp(90px, 22vw, 120px);
+  height: clamp(90px, 22vw, 120px);
+  filter: drop-shadow(0 0 12px currentColor);
+}
+.role-illustration svg { width: 100%; height: 100%; }
+
+/* Modal role icon upgrade */
+.role-item .role-icon svg { width: 36px; height: 36px; display: block; }
+
 </style>
 </head>
 <body>
@@ -254,7 +270,33 @@ input:focus { outline:none; border-color:#00ff88; }
 <!-- SETUP SCREEN -->
 <div id="setupScreen" class="screen active">
   <div class="setup-wrap">
-    <div class="setup-header"><h1>🎭 Suspect</h1></div>
+    <div class="setup-header">
+  <svg viewBox="0 0 320 90" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:320px;height:auto;display:block;margin:0 auto;">
+    <defs>
+      <linearGradient id="gGreen" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00ff88"/><stop offset="100%" stop-color="#00d4ff"/></linearGradient>
+      <linearGradient id="gPurple" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#a020f0"/><stop offset="100%" stop-color="#00d4ff"/></linearGradient>
+      <linearGradient id="gGlow" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#00ff88" stop-opacity="0.3"/><stop offset="100%" stop-color="#00ff88" stop-opacity="0"/></linearGradient>
+      <filter id="glow" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.5" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+      <filter id="softglow" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="4" result="blur"/><feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    </defs>
+    <ellipse cx="160" cy="48" rx="145" ry="30" fill="url(#gGlow)" opacity="0.5"/>
+    <g transform="translate(4, 28)">
+      <path d="M4 18 Q4 4 18 4 L30 4 Q36 4 38 10 Q40 15 44 16 Q48 15 50 10 Q52 4 58 4 L70 4 Q84 4 84 18 L84 30 Q84 40 72 40 L60 40 Q52 40 48 36 Q44 40 36 40 L24 40 Q12 40 12 30 Z" fill="rgba(10,5,39,0.9)" stroke="url(#gGreen)" stroke-width="2" filter="url(#glow)"/>
+      <ellipse cx="28" cy="22" rx="11" ry="8" fill="none" stroke="url(#gGreen)" stroke-width="1.5" opacity="0.9"/>
+      <ellipse cx="28" cy="22" rx="4" ry="4" fill="url(#gGreen)" filter="url(#softglow)" opacity="0.9"/>
+      <ellipse cx="28" cy="22" rx="2" ry="2" fill="#fff" opacity="0.6"/>
+      <ellipse cx="60" cy="22" rx="11" ry="8" fill="none" stroke="url(#gGreen)" stroke-width="1.5" opacity="0.9"/>
+      <ellipse cx="60" cy="22" rx="4" ry="4" fill="url(#gGreen)" filter="url(#softglow)" opacity="0.9"/>
+      <ellipse cx="60" cy="22" rx="2" ry="2" fill="#fff" opacity="0.6"/>
+    </g>
+    <text x="108" y="56" font-family="'Arial Black', 'Impact', sans-serif" font-size="38" font-weight="900" letter-spacing="2" fill="url(#gGreen)" filter="url(#glow)">SUSPECT</text>
+    <line x1="108" y1="62" x2="316" y2="62" stroke="url(#gPurple)" stroke-width="1.5" opacity="0.7"/>
+    <text x="160" y="78" font-family="'Segoe UI', sans-serif" font-size="9" font-weight="600" text-anchor="middle" fill="rgba(255,255,255,0.45)" letter-spacing="3">WHO IS LYING?</text>
+    <circle cx="306" cy="28" r="2" fill="#00ff88" opacity="0.5"/>
+    <circle cx="314" cy="28" r="2" fill="#00d4ff" opacity="0.4"/>
+    <circle cx="306" cy="36" r="1.5" fill="#a020f0" opacity="0.4"/>
+  </svg>
+</div>
 
     <div id="setupAlert" class="setup-alert"></div>
 
@@ -272,7 +314,7 @@ input:focus { outline:none; border-color:#00ff88; }
     <div class="setup-card">
       <div class="counter-row">
         <div class="ctr-info">
-          <div class="ctr-label">🔴 Assassin</div>
+          <div class="ctr-label">Assassin</div>
           <div class="ctr-val-red" id="assassinCount">1</div>
         </div>
         <div class="ctr-btns">
@@ -285,7 +327,7 @@ input:focus { outline:none; border-color:#00ff88; }
     <div class="setup-card">
       <div class="counter-row">
         <div class="ctr-info">
-          <div class="ctr-label">⏱️ Waktu Diskusi (menit)</div>
+          <div class="ctr-label">Waktu Diskusi (menit)</div>
           <div class="ctr-val-white" id="timeDisplay">5</div>
         </div>
         <div class="ctr-btns">
@@ -297,7 +339,7 @@ input:focus { outline:none; border-color:#00ff88; }
 
     <div class="setup-card roles-row" onclick="openRolesModal()">
       <div class="roles-row-left">
-        <span class="roles-icon">🎭</span>
+        <!-- <span class="roles-icon">🎭</span> -->
         <span class="roles-text">Tambahkan peran khusus</span>
       </div>
       <span class="roles-arrow">→</span>
@@ -641,10 +683,269 @@ function checkAbilities(){
   if(guardianIdx!==-1&&!eliminated.includes(guardianIdx)&&checkedSet.has(guardianIdx)&&guardianTarget===null)return false;
   return true;
 }
+
+function roleImage(r){
+  const imgs={
+  'civilian':`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="civ-bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#00ff88" stop-opacity="0.18"/><stop offset="100%" stop-color="#00ff88" stop-opacity="0"/></radialGradient>
+    <linearGradient id="civ-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00ff88"/><stop offset="100%" stop-color="#00d4ff"/></linearGradient>
+    <filter id="civ-glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#civ-bg)" stroke="url(#civ-g)" stroke-width="1.5" opacity="0.6"/>
+  <!-- Body -->
+  <ellipse cx="50" cy="72" rx="20" ry="14" fill="url(#civ-g)" opacity="0.25"/>
+  <path d="M32 85 Q32 65 50 65 Q68 65 68 85" fill="url(#civ-g)" opacity="0.35"/>
+  <!-- Head -->
+  <circle cx="50" cy="38" r="14" fill="none" stroke="url(#civ-g)" stroke-width="2.5" filter="url(#civ-glow)"/>
+  <circle cx="50" cy="38" r="10" fill="url(#civ-g)" opacity="0.2"/>
+  <!-- Checkmark shield -->
+  <path d="M50 52 L42 57 L42 64 Q42 72 50 76 Q58 72 58 64 L58 57 Z" fill="url(#civ-g)" opacity="0.5" stroke="url(#civ-g)" stroke-width="1"/>
+  <polyline points="45,63 48.5,67 55,59" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>`,
+  'imposter':`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="imp-bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#ff0055" stop-opacity="0.2"/><stop offset="100%" stop-color="#ff0055" stop-opacity="0"/></radialGradient>
+    <linearGradient id="imp-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff0055"/><stop offset="100%" stop-color="#ff6688"/></linearGradient>
+    <filter id="imp-glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#imp-bg)" stroke="url(#imp-g)" stroke-width="1.5" opacity="0.5"/>
+  <!-- Hooded cloak -->
+  <path d="M20 95 Q20 60 50 55 Q80 60 80 95 Z" fill="url(#imp-g)" opacity="0.3"/>
+  <!-- Hood -->
+  <path d="M28 50 Q28 18 50 18 Q72 18 72 50 Q72 58 65 62 Q60 68 50 68 Q40 68 35 62 Q28 58 28 50 Z" fill="url(#imp-g)" opacity="0.4" stroke="url(#imp-g)" stroke-width="1.5"/>
+  <!-- Shadow face / eyes glow -->
+  <ellipse cx="42" cy="46" rx="5" ry="3.5" fill="#ff0055" filter="url(#imp-glow)" opacity="0.9"/>
+  <ellipse cx="58" cy="46" rx="5" ry="3.5" fill="#ff0055" filter="url(#imp-glow)" opacity="0.9"/>
+  <!-- Dagger -->
+  <line x1="50" y1="72" x2="50" y2="90" stroke="url(#imp-g)" stroke-width="2.5" stroke-linecap="round" filter="url(#imp-glow)"/>
+  <path d="M45 76 L50 72 L55 76" fill="url(#imp-g)" opacity="0.9"/>
+  <rect x="47" y="74" width="6" height="2.5" rx="1" fill="#ff6688" opacity="0.8"/>
+</svg>`,
+  'jester':`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="jest-bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#ffaa00" stop-opacity="0.2"/><stop offset="100%" stop-color="#ffaa00" stop-opacity="0"/></radialGradient>
+    <linearGradient id="jest-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ffaa00"/><stop offset="100%" stop-color="#ff6600"/></linearGradient>
+    <filter id="jest-glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#jest-bg)" stroke="url(#jest-g)" stroke-width="1.5" opacity="0.5"/>
+  <!-- Head -->
+  <circle cx="50" cy="55" r="18" fill="url(#jest-g)" opacity="0.25" stroke="url(#jest-g)" stroke-width="1.5"/>
+  <!-- Jester hat left point -->
+  <path d="M34 46 Q22 20 30 12 Q36 26 42 38 Z" fill="url(#jest-g)" opacity="0.7"/>
+  <circle cx="30" cy="12" r="4" fill="#ffcc00" stroke="#ffaa00" stroke-width="1" filter="url(#jest-glow)"/>
+  <!-- Jester hat right point -->
+  <path d="M66 46 Q78 20 70 12 Q64 26 58 38 Z" fill="url(#jest-g)" opacity="0.5"/>
+  <circle cx="70" cy="12" r="4" fill="#ffcc00" stroke="#ffaa00" stroke-width="1" filter="url(#jest-glow)"/>
+  <!-- Hat base -->
+  <path d="M30 46 Q50 40 70 46 Q60 52 50 50 Q40 52 30 46 Z" fill="url(#jest-g)" opacity="0.6"/>
+  <!-- Face: eyes -->
+  <circle cx="43" cy="55" r="3" fill="#ffcc00" filter="url(#jest-glow)"/>
+  <circle cx="57" cy="55" r="3" fill="#ffcc00" filter="url(#jest-glow)"/>
+  <!-- Smile -->
+  <path d="M40 63 Q50 70 60 63" stroke="#ffcc00" stroke-width="2" fill="none" stroke-linecap="round" filter="url(#jest-glow)"/>
+  <!-- Bell at chin -->
+  <circle cx="50" cy="72" r="3.5" fill="#ffcc00" stroke="#ffaa00" stroke-width="1" filter="url(#jest-glow)"/>
+</svg>`,
+  'phantom':`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="phan-bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#9d4edd" stop-opacity="0.25"/><stop offset="100%" stop-color="#9d4edd" stop-opacity="0"/></radialGradient>
+    <linearGradient id="phan-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#c77dff"/><stop offset="100%" stop-color="#9d4edd"/></linearGradient>
+    <filter id="phan-glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#phan-bg)" stroke="url(#phan-g)" stroke-width="1.5" opacity="0.5"/>
+  <!-- Ghost body -->
+  <path d="M26 55 Q26 22 50 22 Q74 22 74 55 L74 82 Q70 78 66 82 Q62 78 58 82 Q54 78 50 82 Q46 78 42 82 Q38 78 34 82 Q30 78 26 82 Z" 
+        fill="url(#phan-g)" opacity="0.3" stroke="url(#phan-g)" stroke-width="1.5" filter="url(#phan-glow)"/>
+  <!-- Eyes -->
+  <ellipse cx="41" cy="46" rx="6" ry="7" fill="#c77dff" opacity="0.9" filter="url(#phan-glow)"/>
+  <ellipse cx="59" cy="46" rx="6" ry="7" fill="#c77dff" opacity="0.9" filter="url(#phan-glow)"/>
+  <ellipse cx="41" cy="47" rx="3" ry="4" fill="#1a0533"/>
+  <ellipse cx="59" cy="47" rx="3" ry="4" fill="#1a0533"/>
+  <!-- Sparkle dots -->
+  <circle cx="35" cy="28" r="1.5" fill="#c77dff" filter="url(#phan-glow)"/>
+  <circle cx="68" cy="32" r="1" fill="#c77dff" filter="url(#phan-glow)"/>
+  <circle cx="22" cy="45" r="1.5" fill="#c77dff" opacity="0.6" filter="url(#phan-glow)"/>
+  <circle cx="78" cy="40" r="1" fill="#c77dff" opacity="0.6" filter="url(#phan-glow)"/>
+</svg>`,
+  'detective':`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="det-bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#4ECDC4" stop-opacity="0.2"/><stop offset="100%" stop-color="#4ECDC4" stop-opacity="0"/></radialGradient>
+    <linearGradient id="det-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#4ECDC4"/><stop offset="100%" stop-color="#00d4ff"/></linearGradient>
+    <filter id="det-glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#det-bg)" stroke="url(#det-g)" stroke-width="1.5" opacity="0.5"/>
+  <!-- Magnifying glass circle -->
+  <circle cx="42" cy="42" r="22" fill="none" stroke="url(#det-g)" stroke-width="4" filter="url(#det-glow)"/>
+  <circle cx="42" cy="42" r="17" fill="url(#det-g)" opacity="0.1"/>
+  <!-- Eye inside lens -->
+  <ellipse cx="42" cy="42" rx="10" ry="7" fill="none" stroke="url(#det-g)" stroke-width="1.5" opacity="0.7"/>
+  <circle cx="42" cy="42" r="4.5" fill="url(#det-g)" opacity="0.8" filter="url(#det-glow)"/>
+  <circle cx="40.5" cy="40.5" r="1.5" fill="#fff" opacity="0.7"/>
+  <!-- Handle -->
+  <line x1="59" y1="59" x2="78" y2="80" stroke="url(#det-g)" stroke-width="6" stroke-linecap="round" filter="url(#det-glow)"/>
+  <line x1="59" y1="59" x2="78" y2="80" stroke="#0a0527" stroke-width="2" stroke-linecap="round"/>
+  <!-- Scan lines in lens -->
+  <line x1="26" y1="36" x2="58" y2="36" stroke="url(#det-g)" stroke-width="0.8" opacity="0.3"/>
+  <line x1="24" y1="42" x2="60" y2="42" stroke="url(#det-g)" stroke-width="0.8" opacity="0.3"/>
+  <line x1="26" y1="48" x2="58" y2="48" stroke="url(#det-g)" stroke-width="0.8" opacity="0.3"/>
+</svg>`,
+  'sheriff':`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="sher-bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FFD700" stop-opacity="0.2"/><stop offset="100%" stop-color="#FFD700" stop-opacity="0"/></radialGradient>
+    <linearGradient id="sher-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FFD700"/><stop offset="100%" stop-color="#ffaa00"/></linearGradient>
+    <filter id="sher-glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#sher-bg)" stroke="url(#sher-g)" stroke-width="1.5" opacity="0.5"/>
+  <!-- Star badge - 6 point -->
+  <polygon points="50,14 56,32 74,32 60,44 65,62 50,52 35,62 40,44 26,32 44,32" 
+           fill="url(#sher-g)" opacity="0.85" stroke="#ffcc00" stroke-width="1" filter="url(#sher-glow)"/>
+  <!-- Inner star -->
+  <polygon points="50,24 54,34 64,34 56,40 59,50 50,44 41,50 44,40 36,34 46,34" 
+           fill="#0a0527" opacity="0.6"/>
+  <!-- Center circle -->
+  <circle cx="50" cy="42" r="7" fill="url(#sher-g)" opacity="0.9" filter="url(#sher-glow)"/>
+  <circle cx="50" cy="42" r="4" fill="#0a0527"/>
+  <circle cx="50" cy="42" r="2" fill="#FFD700" filter="url(#sher-glow)"/>
+  <!-- Bottom text line -->
+  <rect x="36" y="68" width="28" height="3" rx="1.5" fill="url(#sher-g)" opacity="0.5"/>
+  <rect x="40" y="74" width="20" height="2" rx="1" fill="url(#sher-g)" opacity="0.3"/>
+</svg>`,
+  'spy':`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="spy-bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FF6B6B" stop-opacity="0.2"/><stop offset="100%" stop-color="#FF6B6B" stop-opacity="0"/></radialGradient>
+    <linearGradient id="spy-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF6B6B"/><stop offset="100%" stop-color="#ff0055"/></linearGradient>
+    <filter id="spy-glow"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#spy-bg)" stroke="url(#spy-g)" stroke-width="1.5" opacity="0.5"/>
+  <!-- Hat brim -->
+  <ellipse cx="50" cy="30" rx="28" ry="5" fill="url(#spy-g)" opacity="0.7"/>
+  <!-- Hat top -->
+  <path d="M28 30 Q28 12 50 12 Q72 12 72 30 Z" fill="url(#spy-g)" opacity="0.5" stroke="url(#spy-g)" stroke-width="1"/>
+  <!-- Hat band -->
+  <rect x="28" y="27" width="44" height="5" fill="url(#spy-g)" opacity="0.8"/>
+  <!-- Face -->
+  <circle cx="50" cy="52" r="16" fill="url(#spy-g)" opacity="0.15" stroke="url(#spy-g)" stroke-width="1.5"/>
+  <!-- Sunglasses -->
+  <rect x="33" y="46" width="14" height="9" rx="4" fill="url(#spy-g)" opacity="0.7" filter="url(#spy-glow)"/>
+  <rect x="53" y="46" width="14" height="9" rx="4" fill="url(#spy-g)" opacity="0.7" filter="url(#spy-glow)"/>
+  <line x1="47" y1="50" x2="53" y2="50" stroke="url(#spy-g)" stroke-width="1.5"/>
+  <line x1="33" y1="50" x2="26" y2="49" stroke="url(#spy-g)" stroke-width="1.5"/>
+  <line x1="67" y1="50" x2="74" y2="49" stroke="url(#spy-g)" stroke-width="1.5"/>
+  <!-- Mouth smirk -->
+  <path d="M44 63 Q50 68 58 62" stroke="url(#spy-g)" stroke-width="2" fill="none" stroke-linecap="round" filter="url(#spy-glow)"/>
+  <!-- Collar -->
+  <path d="M36 72 Q38 68 50 70 Q62 68 64 72 L68 82 Q50 78 32 82 Z" fill="url(#spy-g)" opacity="0.35"/>
+</svg>`,
+  'cupid':`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="cup-bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FF69B4" stop-opacity="0.2"/><stop offset="100%" stop-color="#FF69B4" stop-opacity="0"/></radialGradient>
+    <linearGradient id="cup-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF69B4"/><stop offset="100%" stop-color="#ff1493"/></linearGradient>
+    <filter id="cup-glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#cup-bg)" stroke="url(#cup-g)" stroke-width="1.5" opacity="0.5"/>
+  <!-- Big heart -->
+  <path d="M50 75 Q20 56 20 38 Q20 22 35 22 Q44 22 50 32 Q56 22 65 22 Q80 22 80 38 Q80 56 50 75 Z" 
+        fill="url(#cup-g)" opacity="0.35" stroke="url(#cup-g)" stroke-width="2" filter="url(#cup-glow)"/>
+  <!-- Arrow shaft -->
+  <line x1="18" y1="50" x2="82" y2="38" stroke="url(#cup-g)" stroke-width="2.5" stroke-linecap="round" filter="url(#cup-glow)"/>
+  <!-- Arrowhead -->
+  <polygon points="82,38 74,34 76,42" fill="url(#cup-g)" filter="url(#cup-glow)"/>
+  <!-- Fletching -->
+  <path d="M18,50 L12,44 L20,44 Z" fill="url(#cup-g)" opacity="0.8"/>
+  <path d="M18,50 L10,52 L18,56 Z" fill="url(#cup-g)" opacity="0.6"/>
+  <!-- Mini heart -->
+  <path d="M50 32 Q42 26 42 32 Q42 36 50 42 Q58 36 58 32 Q58 26 50 32 Z" fill="url(#cup-g)" opacity="0.7" filter="url(#cup-glow)"/>
+  <!-- Sparkle dots -->
+  <circle cx="30" cy="20" r="2" fill="#FF69B4" filter="url(#cup-glow)"/>
+  <circle cx="72" cy="18" r="1.5" fill="#FF69B4" filter="url(#cup-glow)"/>
+  <circle cx="80" cy="68" r="1.5" fill="#FF69B4" filter="url(#cup-glow)"/>
+</svg>`,
+  'bounty':`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="bnt-bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FF8C00" stop-opacity="0.2"/><stop offset="100%" stop-color="#FF8C00" stop-opacity="0"/></radialGradient>
+    <linearGradient id="bnt-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF8C00"/><stop offset="100%" stop-color="#ff6600"/></linearGradient>
+    <filter id="bnt-glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#bnt-bg)" stroke="url(#bnt-g)" stroke-width="1.5" opacity="0.5"/>
+  <!-- Outer ring -->
+  <circle cx="50" cy="50" r="34" fill="none" stroke="url(#bnt-g)" stroke-width="2.5" filter="url(#bnt-glow)"/>
+  <!-- Mid ring -->
+  <circle cx="50" cy="50" r="24" fill="none" stroke="url(#bnt-g)" stroke-width="1.5" opacity="0.7"/>
+  <!-- Inner ring -->
+  <circle cx="50" cy="50" r="14" fill="none" stroke="url(#bnt-g)" stroke-width="1.5" opacity="0.5"/>
+  <!-- Crosshairs -->
+  <line x1="50" y1="12" x2="50" y2="27" stroke="url(#bnt-g)" stroke-width="2.5" stroke-linecap="round" filter="url(#bnt-glow)"/>
+  <line x1="50" y1="73" x2="50" y2="88" stroke="url(#bnt-g)" stroke-width="2.5" stroke-linecap="round" filter="url(#bnt-glow)"/>
+  <line x1="12" y1="50" x2="27" y2="50" stroke="url(#bnt-g)" stroke-width="2.5" stroke-linecap="round" filter="url(#bnt-glow)"/>
+  <line x1="73" y1="50" x2="88" y2="50" stroke="url(#bnt-g)" stroke-width="2.5" stroke-linecap="round" filter="url(#bnt-glow)"/>
+  <!-- Center dot -->
+  <circle cx="50" cy="50" r="6" fill="url(#bnt-g)" filter="url(#bnt-glow)"/>
+  <circle cx="50" cy="50" r="3" fill="#fff" opacity="0.5"/>
+</svg>`,
+  'guardian':`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="grd-bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#00BFFF" stop-opacity="0.2"/><stop offset="100%" stop-color="#00BFFF" stop-opacity="0"/></radialGradient>
+    <linearGradient id="grd-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00BFFF"/><stop offset="100%" stop-color="#0080ff"/></linearGradient>
+    <filter id="grd-glow"><feGaussianBlur stdDeviation="2.5" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#grd-bg)" stroke="url(#grd-g)" stroke-width="1.5" opacity="0.5"/>
+  <!-- Shield outer -->
+  <path d="M50 12 L80 24 L80 52 Q80 72 50 88 Q20 72 20 52 L20 24 Z" 
+        fill="url(#grd-g)" opacity="0.25" stroke="url(#grd-g)" stroke-width="2.5" stroke-linejoin="round" filter="url(#grd-glow)"/>
+  <!-- Shield inner -->
+  <path d="M50 20 L74 30 L74 52 Q74 68 50 81 Q26 68 26 52 L26 30 Z" 
+        fill="url(#grd-g)" opacity="0.12" stroke="url(#grd-g)" stroke-width="1" stroke-linejoin="round"/>
+  <!-- Star inside shield -->
+  <polygon points="50,30 53,40 64,40 55,46 58,57 50,51 42,57 45,46 36,40 47,40" 
+           fill="url(#grd-g)" opacity="0.9" filter="url(#grd-glow)"/>
+  <!-- Horizontal lines decoration -->
+  <line x1="34" y1="64" x2="66" y2="64" stroke="url(#grd-g)" stroke-width="1" opacity="0.4"/>
+  <line x1="38" y1="69" x2="62" y2="69" stroke="url(#grd-g)" stroke-width="1" opacity="0.3"/>
+</svg>`,
+  'saboteur':`<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <radialGradient id="sab-bg" cx="50%" cy="50%"><stop offset="0%" stop-color="#FF4500" stop-opacity="0.2"/><stop offset="100%" stop-color="#FF4500" stop-opacity="0"/></radialGradient>
+    <linearGradient id="sab-g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#FF4500"/><stop offset="100%" stop-color="#ff6600"/></linearGradient>
+    <linearGradient id="sab-fuse" x1="0%" y1="0%" x2="100%" y2="0%"><stop offset="0%" stop-color="#ffcc00"/><stop offset="100%" stop-color="#ff4500"/></linearGradient>
+    <filter id="sab-glow"><feGaussianBlur stdDeviation="3" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <filter id="sab-fire"><feGaussianBlur stdDeviation="2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  </defs>
+  <circle cx="50" cy="50" r="48" fill="url(#sab-bg)" stroke="url(#sab-g)" stroke-width="1.5" opacity="0.5"/>
+  <!-- Bomb body -->
+  <circle cx="50" cy="60" r="26" fill="url(#sab-g)" opacity="0.35" stroke="url(#sab-g)" stroke-width="2.5" filter="url(#sab-glow)"/>
+  <circle cx="50" cy="60" r="20" fill="url(#sab-g)" opacity="0.12"/>
+  <!-- Shine on bomb -->
+  <ellipse cx="40" cy="50" rx="8" ry="5" fill="#fff" opacity="0.08" transform="rotate(-20,40,50)"/>
+  <!-- Fuse mount -->
+  <rect x="46" y="30" width="8" height="8" rx="2" fill="url(#sab-g)" opacity="0.8"/>
+  <!-- Fuse line (wiggly) -->
+  <path d="M50 30 Q58 22 54 15 Q50 8 56 12" stroke="url(#sab-fuse)" stroke-width="2.5" fill="none" stroke-linecap="round" filter="url(#sab-glow)"/>
+  <!-- Spark / fire at fuse tip -->
+  <circle cx="56" cy="12" r="5" fill="#ffcc00" opacity="0.9" filter="url(#sab-fire)"/>
+  <circle cx="56" cy="12" r="3" fill="#fff" opacity="0.7" filter="url(#sab-fire)"/>
+  <!-- Skull on bomb -->
+  <circle cx="50" cy="58" r="9" fill="#0a0527" opacity="0.6"/>
+  <ellipse cx="50" cy="55" rx="6" ry="5" fill="url(#sab-g)" opacity="0.55"/>
+  <ellipse cx="50" cy="62" rx="5" ry="3" fill="url(#sab-g)" opacity="0.45"/>
+  <circle cx="46" cy="54" r="2.2" fill="#0a0527"/>
+  <circle cx="54" cy="54" r="2.2" fill="#0a0527"/>
+  <rect x="46" y="61" width="2" height="3" rx="0.5" fill="#0a0527"/>
+  <rect x="49" y="61" width="2" height="3" rx="0.5" fill="#0a0527"/>
+  <rect x="52" y="61" width="2" height="3" rx="0.5" fill="#0a0527"/>
+</svg>`
+  };
+  return imgs[r]||'';
+}
+
 function revealRole(idx){
   curRevealIdx=idx;const role=roles[idx];
   document.getElementById('revealingName').textContent=names[idx];
   const badge=document.getElementById('roleBadge');badge.textContent=roleName(role);badge.className=`role-badge role-${role}`;
+  // Insert role illustration
+  let illEl=document.getElementById('roleIllustration');
+  if(!illEl){illEl=document.createElement('div');illEl.id='roleIllustration';illEl.className='role-illustration';badge.parentNode.insertBefore(illEl,badge);}
+  illEl.innerHTML=roleImage(role);
   document.getElementById('roleTipBox').textContent=roleTip(role);
   const ap=document.getElementById('abilityPanel');ap.innerHTML='';
   const needsAbility=(role==='detective'&&detectiveTarget===null)||(role==='cupid'&&cupidSelections.length!==2)||(role==='guardian'&&guardianTarget===null);
@@ -776,6 +1077,29 @@ function resetGame(){
   guardianIdx=-1;guardianTarget=null;saboteurIdx=-1;saboteurDragTarget=null;pendingElimIdx=-1;
   show('setupScreen');
 }
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Upgrade modal role icons with SVG illustrations
+  const iconMap = {
+    'chkDetective': 'detective', 'chkSheriff': 'sheriff', 'chkPhantom': 'phantom',
+    'chkGuardian': 'guardian', 'chkSpy': 'spy', 'chkSaboteur': 'saboteur',
+    'chkJester': 'jester', 'chkCupid': 'cupid', 'chkBounty': 'bounty'
+  };
+  Object.entries(iconMap).forEach(([id, role]) => {
+    const cb = document.getElementById(id);
+    if (!cb) return;
+    const item = cb.closest('.role-item');
+    if (!item) return;
+    const iconDiv = item.querySelector('.role-icon');
+    if (iconDiv && roleImage(role)) {
+      iconDiv.innerHTML = roleImage(role);
+      iconDiv.style.width = '38px';
+      iconDiv.style.height = '38px';
+      iconDiv.style.fontSize = '0';
+    }
+  });
+});
+
 </script>
 </body>
 </html>
