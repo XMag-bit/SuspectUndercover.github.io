@@ -1031,19 +1031,54 @@ function showResults(){
 }
 function selectSaboteurTarget(idx,el){document.querySelectorAll('#saboteurTargets .vote-btn').forEach(b=>b.classList.remove('selected'));el.classList.add('selected');saboteurDragTarget=idx;document.getElementById('saboteurConfirmBtn').style.display='block';}
 function confirmSaboteur(){if(saboteurDragTarget!==null&&!eliminated.includes(saboteurDragTarget))eliminated.push(saboteurDragTarget);processElimination(pendingElimIdx);}
+function checkImmediateWin(){
+  // Returns winner string if game should end now, or null if game continues
+  const negAlive=names.filter((_,i)=>['imposter','spy','saboteur'].includes(roles[i])&&!eliminated.includes(i));
+  const posAlive=names.filter((_,i)=>['civilian','detective','sheriff','phantom','guardian','jester'].includes(roles[i])&&!eliminated.includes(i));
+  // Assassins win if they equal or outnumber innocent players remaining
+  if(negAlive.length>0&&negAlive.length>=posAlive.length){
+    roles.forEach((r,i)=>{if(['imposter','spy','saboteur'].includes(r))scores[i]+=2;});
+    return`<div class="big win-negative">🔴 ASSASSIN MENANG!<br><small style="font-size:0.6em;font-weight:500;">Assassin menyamai jumlah pemain lain</small></div>`;
+  }
+  // All assassins eliminated
+  if(negAlive.length===0){
+    roles.forEach((r,i)=>{if(['civilian','detective','sheriff','phantom','guardian'].includes(r))scores[i]+=1;});
+    return`<div class="big win-positive">✅ CITIZEN MENANG!<br><small style="font-size:0.6em;font-weight:500;">Semua Assassin telah tereliminasi</small></div>`;
+  }
+  return null;
+}
 function processElimination(elimIdx){
   if(!eliminated.includes(elimIdx))eliminated.push(elimIdx);
   if(linked.includes(elimIdx))linked.forEach(li=>{if(li!==elimIdx&&!eliminated.includes(li))eliminated.push(li);});
   const elimRole=roles[elimIdx];let winnerHTML='';
-  const negAlive=roles.some((r,i)=>['imposter','spy','saboteur'].includes(r)&&!eliminated.includes(i));
-  if(elimRole==='jester'){winnerHTML=`<div class="big win-jester">🤡 JESTER MENANG!</div>`;scores[elimIdx]+=3;}
-  else if(elimIdx===bountyTarget&&bountyIdx!==-1){winnerHTML=`<div class="big win-bounty">🎯 BOUNTY HUNTER MENANG!</div>`;scores[bountyIdx]+=3;}
-  else if(['imposter','spy','saboteur'].includes(elimRole)){roles.forEach((r,i)=>{if(['civilian','detective','sheriff','phantom','guardian'].includes(r))scores[i]+=1;});winnerHTML=negAlive?`<div class="big win-positive">✅ Assassin tereliminasi! Masih ada ancaman lain.</div>`:`<div class="big win-positive">✅ CITIZEN MENANG!</div>`;}
-  else{winnerHTML=`<div class="big win-negative">🔴 ASSASSIN MENANG!</div>`;roles.forEach((r,i)=>{if(['imposter','spy','saboteur'].includes(r))scores[i]+=2;});}
-  if(linked.length===2&&!linked.some(li=>eliminated.includes(li))&&cupidIdx!==-1){winnerHTML+=`<div class="big win-cupid" style="margin-top:5px;">💘 CUPID MENANG! Lovers survive!</div>`;scores[cupidIdx]+=3;}
+
+  // Build elim info string first
   let elimInfo=`☠️ Tereliminasi: <strong>${names[elimIdx]}</strong> (${roleName(elimRole)})`;
   if(saboteurDragTarget!==null&&roles[pendingElimIdx]==='saboteur')elimInfo+=`<br>💣 Juga tereliminasi (Saboteur drag): <strong>${names[saboteurDragTarget]}</strong>`;
   if(linked.includes(elimIdx)&&linked.length===2){const other=linked.find(li=>li!==elimIdx);if(other!==undefined&&eliminated.includes(other))elimInfo+=`<br>💘 Juga tereliminasi (linked): <strong>${names[other]}</strong>`;}
+
+  // Special role outcomes
+  if(elimRole==='jester'){winnerHTML=`<div class="big win-jester">🤡 JESTER MENANG!</div>`;scores[elimIdx]+=3;}
+  else if(elimIdx===bountyTarget&&bountyIdx!==-1){winnerHTML=`<div class="big win-bounty">🎯 BOUNTY HUNTER MENANG!</div>`;scores[bountyIdx]+=3;}
+  else{
+    // Check if game should end immediately after this elimination
+    const immediateWin=checkImmediateWin();
+    if(immediateWin){winnerHTML=immediateWin;}
+    else{
+      // Game continues — show partial result
+      const negAlive=roles.some((r,i)=>['imposter','spy','saboteur'].includes(r)&&!eliminated.includes(i));
+      if(['imposter','spy','saboteur'].includes(elimRole)){
+        roles.forEach((r,i)=>{if(['civilian','detective','sheriff','phantom','guardian'].includes(r))scores[i]+=1;});
+        winnerHTML=`<div class="big win-positive">✅ Assassin tereliminasi! Masih ada ancaman lain.</div>`;
+      } else {
+        winnerHTML=`<div class="big win-negative">🔴 Citizen tereliminasi. Lanjut ronde berikutnya!</div>`;
+      }
+    }
+  }
+
+  // Cupid bonus
+  if(linked.length===2&&!linked.some(li=>eliminated.includes(li))&&cupidIdx!==-1){winnerHTML+=`<div class="big win-cupid" style="margin-top:5px;">💘 CUPID MENANG! Lovers survive!</div>`;scores[cupidIdx]+=3;}
+
   document.getElementById('eliminatedInfo').innerHTML=elimInfo;
   document.getElementById('resultRound').textContent=`Round ${round} - Hasil`;
   document.getElementById('roundWinner').innerHTML=winnerHTML;
@@ -1051,8 +1086,11 @@ function processElimination(elimIdx){
 }
 function finishRound(ce){
   roundHistory.push({round,q:curQ,hasJester:cfg.jest>0,roles:[...roles],eliminated:ce});
-  document.getElementById('nextRoundBtn').style.display=round<cfg.rounds?'block':'none';
-  document.getElementById('finalBtn').style.display=round>=cfg.rounds?'block':'none';
+  const negAlive=names.filter((_,i)=>['imposter','spy','saboteur'].includes(roles[i])&&!ce.includes(i));
+  const posAlive=names.filter((_,i)=>['civilian','detective','sheriff','phantom','guardian','jester'].includes(roles[i])&&!ce.includes(i));
+  const gameOver=negAlive.length===0||negAlive.length>=posAlive.length||round>=cfg.rounds;
+  document.getElementById('nextRoundBtn').style.display=(!gameOver)?'block':'none';
+  document.getElementById('finalBtn').style.display=gameOver?'block':'none';
   show('resultScreen');
 }
 function nextRound(){const prev=[...eliminated];round++;startRound(prev);}
